@@ -1,32 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import LoginForm from './components/LoginForm';
+import { useNavigation, NavigationContainer  } from '@react-navigation/native';
+import 'react-native-gesture-handler';
+import { Text, View, Image, TouchableOpacity} from 'react-native';
+import Navigation from "./src/navigation/Navigation";
+import { createStackNavigator } from '@react-navigation/stack';
+import LoginForm from './src/components/LoginForm';
+const Stack = createStackNavigator();
 
 export default function App() {
+  
   return (
-    <View style={styles.container}>
-      <Banner/>
-      <LoginForm/>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name='Login' component={LoginForm}/>
+      </Stack.Navigator>
+  </NavigationContainer>
   );
 }
-const Banner = () => {
-  return(
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-   
-      <Image
-        source={require('./assets/logo.png')}
-        style={{ width: 200, height: 200 }}
-      />
-  
-  </View>
-  )
-}
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#700',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

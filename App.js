@@ -12,7 +12,6 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name='Login' component={LoginForm}/>
-        
       </Stack.Navigator>
   </NavigationContainer>
   );

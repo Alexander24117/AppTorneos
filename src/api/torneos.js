@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import {API_HOST} from "../utils/constans";
+=======
+import {API_HOST} from "../utils/constanst";
+>>>>>>> 4803a9a5afe26139c0ced8bdd73ce6dc574ac098
 import axios from "axios";
 
 async function postData(url, data) {
@@ -57,9 +61,16 @@ export async function login(data){
         const url = `${API_HOST}/auth/login`
         const response = postData(url, data);
         const result = await response.json()
+<<<<<<< HEAD
         console.log(result)
+=======
+>>>>>>> 4803a9a5afe26139c0ced8bdd73ce6dc574ac098
         return result 
     } catch (error) {
         
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4803a9a5afe26139c0ced8bdd73ce6dc574ac098

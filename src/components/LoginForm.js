@@ -1,9 +1,13 @@
-import react from "react";
+import react , {useState} from "react";
 import { TextInput, Button, View, StyleSheet, Text, Image, Pressable, Alert , SafeAreaView} from "react-native";
+import { login } from "../api/torneos";
 
 
 export default function LoginForm(props) {
     const { onPress, title = 'Login' } = props;
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    
     return (
         
         <View style ={styles.container}>
@@ -14,13 +18,23 @@ export default function LoginForm(props) {
         />
             <Text style = {styles.titulo} >B-Sports Movil</Text>
             <TextInput 
-            style = {styles.textInput}
-            placeholder="Email"/>
+                style = {styles.textInput}
+                value = {username}
+                onChangeText = {setUsername}
+                placeholder="Email"
+                />
             <TextInput 
-            style = {styles.textInput}
-            placeholder="Password"/>
+                style = {styles.textInput}
+                placeholder="Password"
+                value = {password}
+                onChangeText = {setPassword}
+                secureTextEntry
+                />
+               
             <View style ={styles.buttonContainer}>
-            <Pressable style={styles.button} onPress={()=>{Alert.alert("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")}}>
+
+            <Pressable style={styles.button} onPress={()=>{login({  email:username,   
+                                                                    password: password})}}>
                 <Text style={styles.text}>{title}</Text>
             </Pressable>
             </View>
@@ -74,3 +88,4 @@ const styles = StyleSheet.create({
       },
    
 });
+

@@ -39,6 +39,7 @@ export default function LoginForm(props) {
             </Pressable>
             </View>
         </View>
+        
     );
 }
 

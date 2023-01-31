@@ -12,6 +12,16 @@ async function postData(url, data) {
     }
   }
 
+async function putData(url,data){
+    try {
+        const response = await axios.put(url, data);
+       // console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
   /**
    * Consumo de la api dado la url, 
    * no usar a menos de que la url este determinada como se debe
@@ -57,8 +67,12 @@ export async function saveJugador(jugador,identification){
 export async function login(data){
     try {
         const url = `${API_HOST}/auth/login`
-        const response = postData(url, data);
-        const result = await response.json()
+        const response = await putData(url, {
+            email:"2qwe@asd.com",
+            password: "qweqwe1"
+        });
+        
+        const result =  response
         console.log(result)
         return result 
     } catch (error) {

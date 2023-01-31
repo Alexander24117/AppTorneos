@@ -1,2 +1,2 @@
-export const API_HOST =  "http://192.168.1.7:80/api"
+export const API_HOST =  "http://torneosunibague.ddns.net/api"
 //"http://torneosunibague.ddns.net/api" ||

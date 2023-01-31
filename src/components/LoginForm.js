@@ -1,12 +1,26 @@
 import react , {useState} from "react";
 import { TextInput, Button, View, StyleSheet, Text, Image, Pressable, Alert , SafeAreaView} from "react-native";
 import { login } from "../api/torneos";
+import { useFormik } from 'formik'
 
 
-export default function LoginForm(props) {
-    const { onPress, title = 'Login' } = props;
+
+export default function LoginForm(props)  {
+    const { onPress, title = 'Login' , navigation} = props;
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const { values, isSubmitting, setFieldValue , handleSubmit} = useFormik({
+        initialValues : {
+            username: "",
+            password:"",
+        }, 
+        onSubmit : values => {
+         console.log(values);
+          {login({  values })}
+         navigation.navigate('CreateJugador');
+        },
+    })
     
     return (
         
@@ -19,22 +33,19 @@ export default function LoginForm(props) {
             <Text style = {styles.titulo} >B-Sports Movil</Text>
             <TextInput 
                 style = {styles.textInput}
-                value = {username}
-                onChangeText = {setUsername}
-                placeholder="Email"
+                value = {values.username} onChangeText = {text => setFieldValue('username', text)}
+                placeholder="Username"
                 />
-            <TextInput 
+                  <TextInput 
                 style = {styles.textInput}
+                value = {values.password} onChangeText = {text => setFieldValue('password', text)}
                 placeholder="Password"
-                value = {password}
-                onChangeText = {setPassword}
                 secureTextEntry
                 />
                
             <View style ={styles.buttonContainer}>
-
-            <Pressable style={styles.button} onPress={()=>{login({  email:username,   
-                                                                    password: password})}}>
+            <Pressable style={styles.button} onPress={handleSubmit
+           }>
                 <Text style={styles.text}>{title}</Text>
             </Pressable>
             </View>

@@ -31,7 +31,7 @@ export default function Navigation() {
     />
         <Tab.Screen name="Jugadores" component={JugadoresScreen}
         options={{
-            tabBarLabel : "Equipos",
+            tabBarLabel : "Jugadores",
             tabBarIcon: () => (
                 <MaterialCommunityIcons name="run-fast" size={25} color='#1d5bad'/>
             ),

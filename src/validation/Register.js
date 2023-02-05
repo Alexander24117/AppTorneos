@@ -26,7 +26,7 @@ const email = Yup.string()
   .email('Invalid email')
   .required('Email is required');
 
-const date_birth = Yup..object().shape({
+const date_birth = Yup.object().shape({
     birthdate: Yup.date()
       .max(new Date(), "La fecha de nacimiento no puede ser en el futuro")
       .required("La fecha de nacimiento es requerida"),

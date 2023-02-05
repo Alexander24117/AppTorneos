@@ -1,16 +1,12 @@
+import { useFormik } from 'formik'
+import { ScrollView } from 'react-native-gesture-handler';
+import { SelectList } from 'react-native-dropdown-select-list'
 import { View, Text, StyleSheet, TextInput, SafeAreaView, Pressable, Image} from 'react-native'
 import React, {useState} from 'react'
-import {useNavigation} from '@react-navigation/native';
-import RegisterSchema from '../validation/Register'
-import {saveJugador} from '../api/torneos'
-import { useFormik } from 'formik'
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import { SelectList } from 'react-native-dropdown-select-list'
 
 
-
-export default function CreateJugador(props) {
-    const { onPress, title = 'Crear Participante' , navigation} = props;
+export default function CreateInstitucion(props) {
+    const { onPress, title = 'Crear Institucion' , navigation} = props;
 
     const [selected, setSelected] = React.useState("");
   
@@ -25,12 +21,14 @@ export default function CreateJugador(props) {
     ]
     const { values, isSubmitting, setFieldValue , handleSubmit} = useFormik({
         initialValues : {
-            names: "",
-            surnames:"",
-            identificacition:"",
+            name:"",
+            fk_departments_id: "",
+            fk_cities_id: "",
+            address: "",
             cel_phone: "",
-            email:"",
-            date_birth: "",
+            email: "",
+            landline: "",
+            state: 1,
         }, 
         onSubmit : values => {
          console.log(values);
@@ -53,24 +51,22 @@ export default function CreateJugador(props) {
         <Text style = {styles.titulo} >Digite los datos</Text>
         <TextInput 
                 style = {styles.textInput}
-                value = {values.names} onChangeText = {text => setFieldValue('names', text)}
-                placeholder="Nombres"
+                value = {values.name} onChangeText = {text => setFieldValue('name', text)}
+                placeholder="Nombre de la institucion"
                 />
+
+           
                 <TextInput 
                 style = {styles.textInput}
-                value = {values.surnames} onChangeText = {text => setFieldValue('surnames', text)}
-                placeholder="Apellidos"
-                />
-                <TextInput 
-                style = {styles.textInput}
-                value = {values.identificacition} onChangeText = {text => setFieldValue('identificacition', text)}
-                placeholder="Codigo"
+                value = {values.address} onChangeText = {text => setFieldValue('address', text)}
+                placeholder="Direccion"
                 />
                 <TextInput 
                 style = {styles.textInput}
                 value = {values.cel_phone} onChangeText = {text => setFieldValue('cel_phone', text)}
                 placeholder="Telefono"
                 />
+                
                 <TextInput 
                 style = {styles.textInput}
                 value = {values.email} onChangeText = {text => setFieldValue('email', text)}
@@ -79,11 +75,11 @@ export default function CreateJugador(props) {
 
                 <TextInput 
                 style = {styles.textInput}
-                value = {values.date_birth} onChangeText = {text => setFieldValue('date_birth', text)}
-                placeholder="Fecha Nacimiento"
+                value = {values.landline} onChangeText = {text => setFieldValue('landline', text)}
+                placeholder="landline"
                 />
 
-              <View style ={{ paddingVertical : 20, paddingBottom : -10, width : 320}}>
+                <View style ={{ paddingVertical : 20, paddingBottom : -10, width : 320}}>
                 <SelectList 
                     setSelected={(val) => setSelected(val)} 
                     data={data} 
@@ -108,7 +104,8 @@ export default function CreateJugador(props) {
                     placeholder = "Ciudad"
                     
                />
-               </View> 
+                  </View> 
+                
 
             <Pressable style={styles.button} 
             onPress={handleSubmit}>

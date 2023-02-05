@@ -1,7 +1,9 @@
 
 import {API_HOST} from "../utils/constans";
-
+import RNSecureKeyStore, {ACCESSIBLE} from "react-native-secure-key-store";
 import axios from "axios";
+
+  let token = "" 
 
 async function postData(url, data) {
     try {
@@ -22,6 +24,18 @@ async function putData(url,data){
     }
 }
 
+async function getData(url) {
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
   /**
    * Consumo de la api dado la url, 
    * no usar a menos de que la url este determinada como se debe
@@ -69,9 +83,26 @@ export async function login(data){
         const url = `${API_HOST}/auth/login`
         const response = await putData(url, {
             email:"2qwe@asd.com",
-            password: "qweqwe1"
+            password: "qweqwe"
         });
         
+        token = response.access_token
+        console.log(token);
+
+        await departamentos();
+        const result =  response
+        console.log(result)
+        return result 
+    } catch (error) {
+        
+    }
+}
+
+
+export async function departamentos(){
+    try {
+        const url = `${API_HOST}/department/read/all`
+        const response = await getData(url)
         const result =  response
         console.log(result)
         return result 

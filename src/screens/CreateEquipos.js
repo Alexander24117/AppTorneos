@@ -1,16 +1,12 @@
+import { useFormik } from 'formik'
+import { ScrollView } from 'react-native-gesture-handler';
+import { SelectList } from 'react-native-dropdown-select-list'
 import { View, Text, StyleSheet, TextInput, SafeAreaView, Pressable, Image} from 'react-native'
 import React, {useState} from 'react'
-import {useNavigation} from '@react-navigation/native';
-import RegisterSchema from '../validation/Register'
-import {saveJugador} from '../api/torneos'
-import { useFormik } from 'formik'
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import { SelectList } from 'react-native-dropdown-select-list'
 
 
-
-export default function CreateJugador(props) {
-    const { onPress, title = 'Crear Participante' , navigation} = props;
+export default function CreateInstitucion(props) {
+    const { onPress, title = 'Crear Equipo' , navigation} = props;
 
     const [selected, setSelected] = React.useState("");
   
@@ -25,12 +21,17 @@ export default function CreateJugador(props) {
     ]
     const { values, isSubmitting, setFieldValue , handleSubmit} = useFormik({
         initialValues : {
-            names: "",
-            surnames:"",
-            identificacition:"",
+            name:"",
+            fk_institutions_id: "",
             cel_phone: "",
-            email:"",
+            landline: "",
+            email: "",
             date_birth: "",
+            matches_played: 0,
+            matches_won: 0,
+            matches_tied: 0,
+            matches_lost: 0,
+            state: 1,
         }, 
         onSubmit : values => {
          console.log(values);
@@ -51,39 +52,37 @@ export default function CreateJugador(props) {
         />
        
         <Text style = {styles.titulo} >Digite los datos</Text>
+
         <TextInput 
                 style = {styles.textInput}
-                value = {values.names} onChangeText = {text => setFieldValue('names', text)}
-                placeholder="Nombres"
+                value = {values.name} onChangeText = {text => setFieldValue('name', text)}
+                placeholder="Nombre del equipo"
                 />
-                <TextInput 
-                style = {styles.textInput}
-                value = {values.surnames} onChangeText = {text => setFieldValue('surnames', text)}
-                placeholder="Apellidos"
-                />
-                <TextInput 
-                style = {styles.textInput}
-                value = {values.identificacition} onChangeText = {text => setFieldValue('identificacition', text)}
-                placeholder="Codigo"
-                />
-                <TextInput 
+
+        <TextInput 
                 style = {styles.textInput}
                 value = {values.cel_phone} onChangeText = {text => setFieldValue('cel_phone', text)}
                 placeholder="Telefono"
-                />
-                <TextInput 
+                /> 
+            
+        <TextInput 
+                style = {styles.textInput}
+                value = {values.landline} onChangeText = {text => setFieldValue('landline', text)}
+                placeholder="landline"
+                /> 
+                
+        <TextInput 
                 style = {styles.textInput}
                 value = {values.email} onChangeText = {text => setFieldValue('email', text)}
                 placeholder="Email"
-                />
-
-                <TextInput 
+                />   
+        <TextInput 
                 style = {styles.textInput}
                 value = {values.date_birth} onChangeText = {text => setFieldValue('date_birth', text)}
-                placeholder="Fecha Nacimiento"
-                />
-
-              <View style ={{ paddingVertical : 20, paddingBottom : -10, width : 320}}>
+                placeholder="Fecha de nacimiento"
+                />          
+       
+        <View style ={{ paddingVertical : 20, paddingBottom : -10, width : 320}}>
                 <SelectList 
                     setSelected={(val) => setSelected(val)} 
                     data={data} 
@@ -91,31 +90,18 @@ export default function CreateJugador(props) {
                     inputStyles={{marginHorizontal: 40, color:'blue', backgroundColor:'#ffff'}}
                     boxStyles={{ borderColor: 'blue',  backgroundColor:'#ffff'}}
                     search ={{placeholder : "aaaaaaaaa"}}
-                    placeholder = "Departamento"
-                    
-
+                    placeholder = "Institucion"
                />
-                  </View> 
+                </View> 
 
-                  <View style ={{ paddingVertical : 20, paddingBottom : -10,  width : 320}}>
-                <SelectList 
-                    setSelected={(val) => setSelected(val)} 
-                    data={data} 
-                    save="value"
-                    inputStyles={{marginHorizontal: 40, color:'blue', backgroundColor:'#ffff'}}
-                    boxStyles={{ borderColor: 'blue', backgroundColor:'#ffff'}}
-                    search ={{marginHorizontal : 40}}
-                    placeholder = "Ciudad"
-                    
-               />
-               </View> 
+                
 
-            <Pressable style={styles.button} 
+        <Pressable style={styles.button} 
             onPress={handleSubmit}>
             <Text style={styles.text}>{title}</Text>
-           </Pressable>
-                </View>
-              </ScrollView>
+        </Pressable>
+        </View>
+    </ScrollView>
        
 
     </SafeAreaView>

@@ -18,7 +18,7 @@ export default function LoginForm(props)  {
         onSubmit : values => {
          console.log(values);
           {login({  values })}
-         navigation.navigate('CreateJugador');
+         navigation.navigate('CreateTorneos');
         },
     })
     
@@ -44,8 +44,7 @@ export default function LoginForm(props)  {
                 />
                
             <View style ={styles.buttonContainer}>
-            <Pressable style={styles.button} onPress={handleSubmit
-           }>
+            <Pressable style={styles.button} onPress={handleSubmit}>
                 <Text style={styles.text}>{title}</Text>
             </Pressable>
             </View>

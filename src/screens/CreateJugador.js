@@ -22,7 +22,12 @@ export default function CreateJugador(props) {
           return;
         }
         const response = await departamentos(jwt)
-        setData(response);
+        setData(response.Departments.map(item=>{
+          return{
+            key: item.id,
+            value: item.name
+          }
+        }));
       };
       fetchData();
   }, []);
@@ -35,7 +40,9 @@ export default function CreateJugador(props) {
       {key:'6', value:'Diary Products'},
       {key:'7', value:'Drinks'},
     ]
-    const listdepartamentos = info
+    console.log(info);
+    const listdepartamentos =  info
+
     const { values, isSubmitting, setFieldValue , handleSubmit} = useFormik({
         initialValues : {
             names: "",
@@ -99,7 +106,7 @@ export default function CreateJugador(props) {
               <View style ={{ paddingVertical : 20, paddingBottom : -10, width : 320}}>
                 <SelectList 
                     setSelected={(val) => setSelected(val)} 
-                    data={departamentos} 
+                    data={listdepartamentos} 
                     save="value"
                     inputStyles={{marginHorizontal: 40, color:'blue', backgroundColor:'#ffff'}}
                     boxStyles={{ borderColor: 'blue',  backgroundColor:'#ffff'}}

@@ -88,7 +88,7 @@ export async function login(data){
         const result =  response
         return result
     } catch (error) {
-        
+        throw error
     }
 }
 
@@ -98,9 +98,8 @@ export async function departamentos(token){
         const url = `${API_HOST}/department/read/all`
         const response = await getData(url, token)
         const result =  response
-        console.log(result,'con el token desde Jugador');
         return result 
     } catch (error) {
-        
+        throw error
     }
 }

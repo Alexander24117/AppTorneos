@@ -2,24 +2,30 @@ import react , {useState} from "react";
 import { TextInput, Button, View, StyleSheet, Text, Image, Pressable, Alert , SafeAreaView} from "react-native";
 import { login } from "../api/torneos";
 import { useFormik } from 'formik'
+import JWTManager from '../api/JWTManager';
 
+const jwtManager = new JWTManager();
 
 
 export default function LoginForm(props)  {
     const { onPress, title = 'Login' , navigation} = props;
     const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [token, setToken] = useState(null);
 
     const { values, isSubmitting, setFieldValue , handleSubmit} = useFormik({
         initialValues : {
-            username: "",
             password:"",
+            email: "",
+            
         }, 
-        onSubmit : values => {
-         console.log(values);
-          {login({  values })}
-         navigation.navigate('CreateTorneos');
+        onSubmit : async values => {
+          const tokenService = await login(values)
+          if(!(tokenService===undefined)){
+          jwtManager.setJWT(tokenService.access_token)
+         navigation.navigate('CreateJugador');
+        }
         },
+   
     })
     
     return (
@@ -33,8 +39,8 @@ export default function LoginForm(props)  {
             <Text style = {styles.titulo} >B-Sports Movil</Text>
             <TextInput 
                 style = {styles.textInput}
-                value = {values.username} onChangeText = {text => setFieldValue('username', text)}
-                placeholder="Username"
+                value = {values.email} onChangeText = {text => setFieldValue('email', text)}
+                placeholder="Email"
                 />
                   <TextInput 
                 style = {styles.textInput}

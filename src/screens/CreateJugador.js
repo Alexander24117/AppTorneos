@@ -1,19 +1,31 @@
 import { View, Text, StyleSheet, TextInput, SafeAreaView, Pressable, Image} from 'react-native'
-import React, {useState} from 'react'
+import React, {useState, useEffect } from 'react'
 import {useNavigation} from '@react-navigation/native';
 import RegisterSchema from '../validation/Register'
 import {saveJugador} from '../api/torneos'
 import { useFormik } from 'formik'
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import {  ScrollView } from 'react-native-gesture-handler';
 import { SelectList } from 'react-native-dropdown-select-list'
+import { departamentos } from "../api/torneos";
+import JWTManager from '../api/JWTManager';
 
-
+const jwtManager = new JWTManager();
 
 export default function CreateJugador(props) {
     const { onPress, title = 'Crear Participante' , navigation} = props;
-
+    const [info, setData] = useState(null);
     const [selected, setSelected] = React.useState("");
-  
+    useEffect(() => {
+      const fetchData = async () => {
+        const jwt = await jwtManager.getToken();
+        if (!jwt) {
+          return;
+        }
+        const response = await departamentos(jwt)
+        setData(response);
+      };
+      fetchData();
+  }, []);
     const data = [
       {key:'1', value:'Mobiles', disabled:true},
       {key:'2', value:'Appliances'},
@@ -23,6 +35,7 @@ export default function CreateJugador(props) {
       {key:'6', value:'Diary Products'},
       {key:'7', value:'Drinks'},
     ]
+    const listdepartamentos = info
     const { values, isSubmitting, setFieldValue , handleSubmit} = useFormik({
         initialValues : {
             names: "",
@@ -86,7 +99,7 @@ export default function CreateJugador(props) {
               <View style ={{ paddingVertical : 20, paddingBottom : -10, width : 320}}>
                 <SelectList 
                     setSelected={(val) => setSelected(val)} 
-                    data={data} 
+                    data={departamentos} 
                     save="value"
                     inputStyles={{marginHorizontal: 40, color:'blue', backgroundColor:'#ffff'}}
                     boxStyles={{ borderColor: 'blue',  backgroundColor:'#ffff'}}

@@ -4,7 +4,6 @@ import RNSecureKeyStore, {ACCESSIBLE} from "react-native-secure-key-store";
 import axios from "axios";
 
   let token = "" 
-
 async function postData(url, data) {
     try {
       const response = await axios.post(url, data);
@@ -24,11 +23,11 @@ async function putData(url,data){
     }
 }
 
-async function getData(url) {
+async function getData(url, tokenA) {
     try {
       const response = await axios.get(url, {
         headers: {
-          'Authorization': 'Bearer ' + token
+          'Authorization': 'Bearer ' + tokenA
         }
       });
       return response.data;
@@ -81,30 +80,25 @@ export async function saveJugador(jugador,identification){
 export async function login(data){
     try {
         const url = `${API_HOST}/auth/login`
-        const response = await putData(url, {
+        const response = await putData(url, data/**{
             email:"2qwe@asd.com",
             password: "qweqwe"
-        });
-        
+        }*/);
         token = response.access_token
-        console.log(token);
-
-        await departamentos();
         const result =  response
-        console.log(result)
-        return result 
+        return result
     } catch (error) {
         
     }
 }
 
 
-export async function departamentos(){
+export async function departamentos(token){
     try {
         const url = `${API_HOST}/department/read/all`
-        const response = await getData(url)
+        const response = await getData(url, token)
         const result =  response
-        console.log(result)
+        console.log(result,'con el token desde Jugador');
         return result 
     } catch (error) {
         

@@ -1,8 +1,5 @@
 import { View, Text, StyleSheet, TextInput, SafeAreaView, Pressable, Image} from 'react-native'
 import React, {useState, useEffect } from 'react'
-import {useNavigation} from '@react-navigation/native';
-import RegisterSchema from '../validation/Register'
-import {saveJugador} from '../api/torneos'
 import { useFormik } from 'formik'
 import {  ScrollView } from 'react-native-gesture-handler';
 import { SelectList } from 'react-native-dropdown-select-list'
@@ -11,8 +8,8 @@ import JWTManager from '../api/JWTManager';
 
 const jwtManager = new JWTManager();
 
-export default function CreateJugador(props) {
-    const { onPress, title = 'Crear Participante' , navigation} = props;
+export default function UpdateJugador(props) {
+    const { onPress, title = 'Actualizar Participante' , navigation} = props;
     const [info, setData] = useState(null);
     const [infoCiudad, setDataCiudad] = useState(null);
     const [selected, setSelected] = React.useState("");

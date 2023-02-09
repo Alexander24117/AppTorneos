@@ -103,3 +103,14 @@ export async function departamentos(token){
         throw error
     }
 }
+
+export async function ciudades(token){
+    try {
+        const url = `${API_HOST}/city/read/all`
+        const response = await getData(url, token)
+        const result =  response
+        return result 
+    } catch (error) {
+        throw error
+    }
+}

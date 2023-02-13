@@ -6,16 +6,16 @@ import {saveJugador} from '../api/torneos'
 import { useFormik } from 'formik'
 import {  ScrollView } from 'react-native-gesture-handler';
 import { SelectList } from 'react-native-dropdown-select-list'
-import { departamentos, ciudades } from "../api/torneos";
+import { departamentos, ciudadesPorDepartment } from "../api/torneos";
 import JWTManager from '../api/JWTManager';
 
 const jwtManager = new JWTManager();
 
 export default function CreateJugador(props) {
     const { onPress, title = 'Crear Participante' , navigation} = props;
-    const [info, setData] = useState(null);
-    const [infoCiudad, setDataCiudad] = useState(null);
-    const [selected, setSelected] = React.useState("");
+    const [infoDepartment, setDataDepartment] = useState([]);
+    const [infoCiudad, setDataCiudad] = useState([]);
+    const [selectedDeparment, setSelectedDeparment] = React.useState("");
     const [selectedCiudad, setselectedCiudad] = React.useState("");
 
     
@@ -26,25 +26,41 @@ export default function CreateJugador(props) {
           return;
         }
         const response = await departamentos(jwt)
-        setData(response.Departments.map(item=>{
+        setDataDepartment(response.Departments.map(item=>{
           return{
             key: item.id,
             value: item.name
           }
         }));
-        const responseCiudad = await ciudades(jwt)
-        setDataCiudad(responseCiudad.Cities.map(item=>{
-          return{
-            key: item.id,
-            value: item.name,
-            idDepa: item.fk_departments_id
-          }
-        }))
       };
       fetchData();
     }, []);
-
-    const listdepartamentos =  info
+    
+    useEffect(()=>{
+      if (!selectedDeparment) {
+        return;
+      }
+      const fetchMunicipios = async () => {
+        const jwt = await jwtManager.getToken();
+        if (!jwt) {
+          return;
+        }
+        const response = await ciudadesPorDepartment(jwt, selectedDeparment)
+        setDataCiudad(response.Cities.map(item=>{
+          return{
+            key: item.id,
+            value: item.name
+          }
+        }))
+      };
+      fetchMunicipios()
+    }, [selectedDeparment])
+  
+   
+    const handleDepartamentoChange = (departamento) => {
+      console.log(selectedDeparment,'depar selected');
+      fetchMunicipios(selectedDeparment).then(data => setMunicipios(data));
+    };
 
     const { values, isSubmitting, setFieldValue , handleSubmit} = useFormik({
         initialValues : {
@@ -61,7 +77,7 @@ export default function CreateJugador(props) {
          navigation.navigate('Navigation');
         },
     })
-    values.department = selected
+    values.department = selectedDeparment
     const data = infoCiudad
   return (
     <SafeAreaView>
@@ -110,28 +126,31 @@ export default function CreateJugador(props) {
 
               <View style ={{ paddingVertical : 20, paddingBottom : -10, width : 320}}>
                 <SelectList 
-                    setSelected={(val) => setSelected(val)} 
-                    data={listdepartamentos} 
+                    setSelected={(val) => setSelectedDeparment(val)} 
+                    data={infoDepartment} 
                     save="key"
                     inputStyles={{marginHorizontal: 40, color:'blue', backgroundColor:'#ffff'}}
                     boxStyles={{ borderColor: 'blue',  backgroundColor:'#ffff'}}
                     search ={{placeholder : "aaaaaaaaa"}}
                     placeholder = "Departamento"
+                    keyExtractor={item => item.key}
+                    
                />
               </View> 
-
+              {selectedDeparment && (
                 <View style ={{ paddingVertical : 20, paddingBottom : -10,  width : 320}}>
                 <SelectList 
                     setSelected={(val) => setselectedCiudad(val)} 
-                    data={data} 
-                    save="value"
+                    data={infoCiudad} 
+                    save="key"
                     inputStyles={{marginHorizontal: 40, color:'blue', backgroundColor:'#ffff'}}
                     boxStyles={{ borderColor: 'blue', backgroundColor:'#ffff'}}
                     search ={{marginHorizontal : 40}}
                     placeholder = "Ciudad"
                     
                />
-               </View> 
+               </View>
+              )}
 
             <Pressable style={styles.button} 
             onPress={handleSubmit}>

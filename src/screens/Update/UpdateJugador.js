@@ -3,8 +3,8 @@ import React, {useState, useEffect } from 'react'
 import { useFormik } from 'formik'
 import {  ScrollView } from 'react-native-gesture-handler';
 import { SelectList } from 'react-native-dropdown-select-list'
-import { departamentos, ciudades } from "../api/torneos";
-import JWTManager from '../api/JWTManager';
+import { departamentos, ciudades } from "../../api/torneos";
+import JWTManager from '../../api/JWTManager';
 
 const jwtManager = new JWTManager();
 
@@ -69,7 +69,7 @@ export default function UpdateJugador(props) {
         <Image
           style={{ width: 350, height: 300, marginBottom: 10}}
           
-          source={require("../../assets/logojugadores.png")}
+          source={require("../../../assets/logojugadores.png")}
         />
        
         <Text style = {styles.titulo} >Digite los datos</Text>

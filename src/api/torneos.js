@@ -114,3 +114,22 @@ export async function ciudades(token){
         throw error
     }
 }
+export async function ciudadesPorDepartment(tokenY, departamento){
+    try {
+        
+        const url = `${API_HOST}/city/read/department`
+        const response = await axios.get(url,{
+            headers: {
+                Authorization: `Bearer ${tokenY}`
+              },
+              params:{
+                department_id: departamento
+              }
+        })
+        const result =  response.data
+        return result 
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}

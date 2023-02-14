@@ -10,6 +10,7 @@ import CreateInstitucion from './src/screens/CreateInstitucion';
 import CreateEquipos from './src/screens/CreateEquipos';
 import CreateTorneos from './src/screens/CreateTorneos';
 import UpdateJugador from './src/screens/Update/UpdateJugador';
+import UpdateEquipos from './src/screens/Update/UpdateEquipos';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,7 @@ export default function App() {
         <Stack.Screen name='CreateEquipo' component={CreateEquipos} options={{headerShown:false}}/>
         <Stack.Screen name='CreateTorneos' component={CreateTorneos} options={{headerShown:false}}/>
         <Stack.Screen name='UpdateJugador' component={UpdateJugador} options={{headerShown:false}}/>
+        <Stack.Screen name='UpdateEquipos' component={UpdateEquipos} options={{headerShown:false}}/>
 
         {(props) => <HomeScreen {...props} extraData={someData} />}
       

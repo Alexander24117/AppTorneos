@@ -5,8 +5,8 @@ import { View, Text, StyleSheet, TextInput, SafeAreaView, Pressable, Image} from
 import React, {useState} from 'react'
 
 
-export default function CreateEquipos(props) {
-    const { onPress, title = 'Crear Equipo' , navigation} = props;
+export default function UpdateEquipos(props) {
+    const { onPress, title = 'Actualizar Equipo' , navigation} = props;
 
     const [selected, setSelected] = React.useState("");
   
@@ -48,7 +48,7 @@ export default function CreateEquipos(props) {
         <Image
           style={{ width: 350, height: 300, marginBottom: 10}}
           
-          source={require("../../assets/logojugadores.png")}
+          source={require("../../../assets/logojugadores.png")}
         />
        
         <Text style = {styles.titulo} >Digite los datos</Text>

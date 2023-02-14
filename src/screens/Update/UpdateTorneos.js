@@ -5,9 +5,9 @@ import { View, Text, StyleSheet, TextInput, SafeAreaView, Pressable, Image} from
 import React, {useState} from 'react'
 
 
-export default function CreateTorneos(props) {
-    const { onPress, title = 'Crear Torneo' , navigation} = props;
-    
+export default function UpdateTorneos(props) {
+    const { onPress, title = 'Actualizar Torneo' , navigation} = props;
+
     const [selectedAdmin, setSelectedAdmin] = React.useState("");
     const dataAdmin = [
       {key:'1', value:'consumir servicio'},
@@ -24,6 +24,16 @@ export default function CreateTorneos(props) {
     const dataEstado = [
       {key:'1', value:'Activo'},
       {key:'0', value:'Inactivo'},
+    ]
+  
+    const data = [
+      {key:'1', value:'Mobiles', disabled:true},
+      {key:'2', value:'Appliances'},
+      {key:'3', value:'Cameras'},
+      {key:'4', value:'Computers', disabled:true},
+      {key:'5', value:'Vegetables'},
+      {key:'6', value:'Diary Products'},
+      {key:'7', value:'Drinks'},
     ]
 
     useEffect(() => {
@@ -70,7 +80,7 @@ export default function CreateTorneos(props) {
         <Image
           style={{ width: 350, height: 300, marginBottom: 10}}
           
-          source={require("../../assets/logojugadores.png")}
+          source={require("../../../assets/logojugadores.png")}
         />
        
         <Text style = {styles.titulo} >Digite los datos</Text>
@@ -91,7 +101,7 @@ export default function CreateTorneos(props) {
                 placeholder="Fecha de Finalizacion"
                 />
 
-                <View style ={{ paddingVertical : 20, paddingBottom : -10, width : 320}}>
+<View style ={{ paddingVertical : 20, paddingBottom : -10, width : 320}}>
                 <SelectList 
                     setSelected={(val) => setSelectedAdmin(val)} 
                     data={dataAdmin} 

@@ -50,11 +50,12 @@ export default function CreateJugador(props) {
         initialValues : {
             names: "",
             surnames:"",
+            fk_departments_id: "",
+            fk_cities_id: "",
             identificacition:"",
             cel_phone: "",
             email:"",
             date_birth: "",
-            department: "",
         }, 
         onSubmit : values => {
          console.log(values);

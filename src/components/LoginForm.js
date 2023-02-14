@@ -22,7 +22,7 @@ export default function LoginForm(props)  {
           const tokenService = await login(values)
           if(!(tokenService===undefined)){
           jwtManager.setJWT(tokenService.access_token)
-         navigation.navigate('CreateJugador');
+         navigation.navigate('UpdateEquipos');
         }
         },
    

@@ -1,23 +1,23 @@
-import { View, Text, StyleSheet, TextInput, SafeAreaView, Pressable, Image} from 'react-native'
+import { View, Text, StyleSheet, TextInput, SafeAreaView, Pressable, Image, Button} from 'react-native'
 import React, {useState, useEffect } from 'react'
-import {useNavigation} from '@react-navigation/native';
-import RegisterSchema from '../validation/Register'
-import {saveJugador} from '../api/torneos'
+import {saveJugador , crearParticipantes} from '../api/torneos'
 import { useFormik } from 'formik'
 import {  ScrollView } from 'react-native-gesture-handler';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { departamentos, ciudadesPorDepartment } from "../api/torneos";
 import JWTManager from '../api/JWTManager';
+import * as SecureStore from 'expo-secure-store';
+import * as ImagePicker from 'expo-image-picker';
 
 const jwtManager = new JWTManager();
 
 export default function CreateJugador(props) {
-    const { onPress, title = 'Crear Participante' , navigation} = props;
+    const { onPress, title = 'Crear Participante', title2 = 'Seleccionar Foto'  , navigation} = props;
     const [infoDepartment, setDataDepartment] = useState([]);
     const [infoCiudad, setDataCiudad] = useState([]);
     const [selectedDeparment, setSelectedDeparment] = React.useState("");
     const [selectedCiudad, setselectedCiudad] = React.useState("");
-
+    const [image, setImage] = useState(null);
     
     useEffect(() => {
       const fetchData = async () => {
@@ -62,23 +62,41 @@ export default function CreateJugador(props) {
       fetchMunicipios(selectedDeparment).then(data => setMunicipios(data));
     };
 
+    const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+        base64:true,
+      });
+      values.image_64 = "data:image/png;base64,"+result.base64;
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  
     const { values, isSubmitting, setFieldValue , handleSubmit} = useFormik({
         initialValues : {
             names: "",
             surnames:"",
             fk_departments_id: "",
             fk_cities_id: "",
-            identificacition:"",
+            identification:"",
             cel_phone: "",
             email:"",
             date_birth: "",
+            image_64:"",
+            state:1
         }, 
-        onSubmit : values => {
-         console.log(values);
-         navigation.navigate('Navigation');
+        onSubmit : async values => {
+         const token = await SecureStore.getItemAsync('token');
+         crearParticipantes(token, values)
         },
     })
-    values.department = selectedDeparment
+    values.fk_departments_id = selectedDeparment
+    values.fk_cities_id = selectedCiudad
     const data = infoCiudad
   return (
     <SafeAreaView>
@@ -105,7 +123,7 @@ export default function CreateJugador(props) {
                 />
                 <TextInput 
                 style = {styles.textInput}
-                value = {values.identificacition} onChangeText = {text => setFieldValue('identificacition', text)}
+                value = {values.identification} onChangeText = {text => setFieldValue('identification', text)}
                 placeholder="Codigo"
                 />
                 <TextInput 
@@ -150,6 +168,14 @@ export default function CreateJugador(props) {
                     placeholder = "Ciudad"
                     
                />
+
+              <View style={styles.FotoButton}>
+              < Pressable style={styles.button} 
+                onPress={pickImage}>
+                <Text style={styles.text}>{title2}</Text>
+                </Pressable>
+                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, borderRadius:20  }} />}
+              </View>
                </View>
               )}
 
@@ -209,6 +235,15 @@ const styles = StyleSheet.create({
     },
     scroll:{
       marginHorizontal: 0.1,
+      borderRadius: 4,
+      color: "blue",
 
+
+    },
+    FotoButton:{
+      marginTop: 20,
+      flex: 1, 
+      alignItems: 'center', 
+      justifyContent: 'center',
     }
 })

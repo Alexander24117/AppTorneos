@@ -2,23 +2,50 @@ import { useFormik } from 'formik'
 import { ScrollView } from 'react-native-gesture-handler';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { View, Text, StyleSheet, TextInput, SafeAreaView, Pressable, Image} from 'react-native'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
+import * as SecureStore from 'expo-secure-store';
+import { crearEquipo, traerInstituciones } from "../api/torneos";
+import JWTManager from '../api/JWTManager';
+import * as ImagePicker from 'expo-image-picker';
 
 
+const jwtManager = new JWTManager();
 export default function CreateEquipos(props) {
-    const { onPress, title = 'Crear Equipo' , navigation} = props;
+    const { onPress, title = 'Crear Equipo' , title2 ='Seleccionar Foto' , navigation} = props;
+    const [selectedInsti, setSelectedInsti] = React.useState("");
+    const [infoInstitution, setDataInsti] = useState([]);
+    const [image, setImage] = useState(null);
+    useEffect(() => {
+      const fetchData = async () => {
+        const jwt = await jwtManager.getToken();
+        if (!jwt) {
+          return;
+        }
+        const response = await traerInstituciones(jwt)
+        setDataInsti(response.Institutions.map(item=>{
+          return{
+            key: item.id,
+            value: item.name
+          }
+        }));
+      };
+      fetchData();
+    }, []);
 
-    const [selected, setSelected] = React.useState("");
-  
-    const data = [
-      {key:'1', value:'Mobiles', disabled:true},
-      {key:'2', value:'Appliances'},
-      {key:'3', value:'Cameras'},
-      {key:'4', value:'Computers', disabled:true},
-      {key:'5', value:'Vegetables'},
-      {key:'6', value:'Diary Products'},
-      {key:'7', value:'Drinks'},
-    ]
+    const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+        base64:true,
+      });
+      values.image_64 = "data:image/png;base64,"+result.base64;
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+    
     const { values, isSubmitting, setFieldValue , handleSubmit} = useFormik({
         initialValues : {
             name:"",
@@ -32,13 +59,15 @@ export default function CreateEquipos(props) {
             matches_tied: 0,
             matches_lost: 0,
             state: 1,
+            image_64:"",
         }, 
-        onSubmit : values => {
+        onSubmit : async values => {
          console.log(values);
-         navigation.navigate('Navigation');
-        },
+         const token = await SecureStore.getItemAsync('token');
+         crearEquipo(token, values)
+        }, 
     })
-
+    values.fk_institutions_id = selectedInsti
   return (
     <SafeAreaView>
 
@@ -84,15 +113,24 @@ export default function CreateEquipos(props) {
        
         <View style ={{ paddingVertical : 20, paddingBottom : -10, width : 320}}>
                 <SelectList 
-                    setSelected={(val) => setSelected(val)} 
-                    data={data} 
-                    save="value"
+                    setSelected={(val) => setSelectedInsti(val)} 
+                    data={infoInstitution} 
+                    save="key"
                     inputStyles={{marginHorizontal: 40, color:'blue', backgroundColor:'#ffff'}}
                     boxStyles={{ borderColor: 'blue',  backgroundColor:'#ffff'}}
                     search ={{placeholder : "aaaaaaaaa"}}
                     placeholder = "Institucion"
                />
                 </View> 
+
+
+            <View style={styles.FotoButton}>
+              < Pressable style={styles.button} 
+                onPress={pickImage}>
+                <Text style={styles.text}>{title2}</Text>
+                </Pressable>
+                {image && <Image source={{ uri: image }} style={{ width: 200, height: 200, borderRadius:20  }} />}
+            </View>
 
                 
 
@@ -153,5 +191,11 @@ const styles = StyleSheet.create({
     scroll:{
       marginHorizontal: 0.1,
 
+    },
+    FotoButton:{
+      marginTop: 20,
+      flex: 1, 
+      alignItems: 'center', 
+      justifyContent: 'center',
     }
 })

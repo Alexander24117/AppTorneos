@@ -66,10 +66,15 @@ export async function getJugadores(){
     }
 }
 
-export async function saveJugador(jugador,identification){
+export async function saveJugador(jugador, token){
     try {
-        const url = `${API_HOST}/participant/create/identification`
-        const response = postData(url, jugador);
+        const url = `${API_HOST}/participant/create`
+        const response = await axios.post(url,{
+            headers: {
+                Authorization: `Bearer ${tokenY}`
+              },
+              params:jugador
+        })
         const result = await response.json()
         return result
     } catch (error) {
@@ -118,12 +123,11 @@ export async function ciudadesPorDepartment(tokenY, departamento){
     try {
         
         const url = `${API_HOST}/city/read/department`
-        const response = await axios.get(url,{
+        const response = await axios.put(url, {
+            department_id: departamento
+          }, {
             headers: {
-                Authorization: `Bearer ${tokenY}`
-              },
-              params:{
-                department_id: departamento
+            Authorization: `Bearer ${tokenY}`
               }
         })
         const result =  response.data
@@ -131,5 +135,48 @@ export async function ciudadesPorDepartment(tokenY, departamento){
     } catch (error) {
         console.error(error);
         return [];
+    }
+}
+
+export async function crearParticipantes(tokenP, cuerpo){
+    try {
+        const url = `${API_HOST}/participant/create/identification`
+        const response = await axios.post(url,cuerpo,{
+            headers: {
+                Authorization: `Bearer ${tokenP}`
+              },
+        })
+        const result =  response
+        console.log(response.data.message);
+        return result 
+    } catch (error) {
+        throw error
+    }
+}
+
+export async function traerInstituciones(token){
+    try {
+        const url = `${API_HOST}/institution/read/all`
+        const response = await getData(url, token)
+        const result =  response
+        return result 
+    } catch (error) {
+        throw error
+    }
+}
+
+export async function crearEquipo(tokenP, cuerpo){
+    try {
+        const url = `${API_HOST}/team/create`
+        const response = await axios.post(url,cuerpo,{
+            headers: {
+                Authorization: `Bearer ${tokenP}`
+              },
+        })
+        const result =  response
+        console.log(response.data.message);
+        return result 
+    } catch (error) {
+        throw error
     }
 }

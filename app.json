@@ -9,7 +9,15 @@
     "splash": {
       "image": "./assets/unibaguelogo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#07162a"
+      "backgroundColor": "#07162a",
+      "plugins": [
+        [
+          "expo-image-picker",
+          {
+            "photosPermission": "The app accesses your photos to let you share them with your friends."
+          }
+        ]
+      ]
     },
     "updates": {
       "fallbackToCacheTimeout": 0

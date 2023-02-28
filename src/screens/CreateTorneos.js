@@ -2,16 +2,15 @@ import { useFormik } from 'formik'
 import { ScrollView } from 'react-native-gesture-handler';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { View, Text, StyleSheet, TextInput, SafeAreaView, Pressable, Image} from 'react-native'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
+import * as SecureStore from 'expo-secure-store';
+import { crearEquipo, traerEquipos } from "../api/torneos";
+import JWTManager from '../api/JWTManager';
 
-
+const jwtManager = new JWTManager();
 export default function CreateTorneos(props) {
     const { onPress, title = 'Crear Torneo' , navigation} = props;
     
-    const [selectedAdmin, setSelectedAdmin] = React.useState("");
-    const dataAdmin = [
-      {key:'1', value:'consumir servicio'},
-    ]
     const [selectedSport, setSelectedSport] = React.useState("");
     const dataSport = [
       {key:'1', value:'consumir servicio'},
@@ -32,8 +31,8 @@ export default function CreateTorneos(props) {
         if (!jwt) {
           return;
         }
-        const response = await departamentos(jwt)
-        setData(response.Departments.map(item=>{
+        const response = await traerEquipos(jwt)
+        setDataInsti(response.Sports.map(item=>{
           return{
             key: item.id,
             value: item.name
@@ -42,6 +41,7 @@ export default function CreateTorneos(props) {
       };
       fetchData();
     }, []);
+
 
     const { values, isSubmitting, setFieldValue , handleSubmit} = useFormik({
         initialValues : {

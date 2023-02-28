@@ -4524,6 +4524,19 @@ expo-application@~5.0.1:
   resolved "https://registry.npmjs.org/expo-application/-/expo-application-5.0.1.tgz"
   integrity sha512-bThxK5zH/Lc2tkCvEXGjfM7ayvOVmPWYcWzXsMIU1RtG73TyXo4cq+73FvfDNIWn6gKS0WyMcmoPB3WXEV/jsw==
 
+expo-asset@^8.7.0:
+  version "8.7.0"
+  resolved "https://registry.yarnpkg.com/expo-asset/-/expo-asset-8.7.0.tgz#325804e0bb21dac1e83b1e8d937d9a9257dae4a0"
+  integrity sha512-lkoNsHK6vf+outISB6/37SonXcAL6Buw0ycjiwQVFfpOBKpkQa+zw5wm1m3KwjH2txmR3xdIzcpWsJkgovYCvQ==
+  dependencies:
+    blueimp-md5 "^2.10.0"
+    expo-constants "~14.0.0"
+    expo-file-system "~15.1.0"
+    invariant "^2.2.4"
+    md5-file "^3.2.3"
+    path-browserify "^1.0.0"
+    url-parse "^1.5.9"
+
 expo-asset@~8.7.0:
   version "8.7.0"
   resolved "https://registry.npmjs.org/expo-asset/-/expo-asset-8.7.0.tgz"
@@ -4550,7 +4563,7 @@ expo-error-recovery@~4.0.1:
   resolved "https://registry.npmjs.org/expo-error-recovery/-/expo-error-recovery-4.0.1.tgz"
   integrity sha512-wceptnRX+N3qCSVTNbIchUFu3GmY30onRH5L66OF8HMLpAIQfrZMLxJfz7SAMJTcr3jxsJ11vSa2l2RaPKgHsQ==
 
-expo-file-system@~15.1.0, expo-file-system@~15.1.1:
+expo-file-system@^15.1.1, expo-file-system@~15.1.0, expo-file-system@~15.1.1:
   version "15.1.1"
   resolved "https://registry.npmjs.org/expo-file-system/-/expo-file-system-15.1.1.tgz"
   integrity sha512-MYYDKxjLo9VOkvGHqym5EOAUS+ero9O66X5zI+EXJzqNznKvnfScdXeeAaQzShmWtmLkdVDCoYFGOaTvTA1wTQ==
@@ -4569,10 +4582,10 @@ expo-image-loader@~4.0.0:
   resolved "https://registry.yarnpkg.com/expo-image-loader/-/expo-image-loader-4.0.0.tgz#a17e5f95a4c1671791168dd5dfc221bf2f88480c"
   integrity sha512-hVMhXagsO1cSng5s70IEjuJAuHy2hX/inu5MM3T0ecJMf7L/7detKf22molQBRymerbk6Tzu+20h11eU0n/3jQ==
 
-expo-image-picker@^14.1.0:
-  version "14.1.0"
-  resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-14.1.0.tgz#a88c91f88bbb506ff7ef26f41504f2350978a73f"
-  integrity sha512-YVkzkStaapaWiBBwqMpTCiyohgHkj7s3OoICZ9XWxp4Zgs7STYkHqlJd6RDx0/qW8UkhakNuPedw7wurPoRsOQ==
+expo-image-picker@~14.0.2:
+  version "14.0.3"
+  resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-14.0.3.tgz#ea0bbe796ccc3bd5e58fc00487be22bac317afeb"
+  integrity sha512-VN5wMWzhYhIRhFq8I1pjMbn/ivjlhWfxzJpz5jUOf3mQ8vxrI5GcR8cJO9kyYwuCrI9W3GUzh/aDt7QRSTQDDA==
   dependencies:
     expo-image-loader "~4.0.0"
 

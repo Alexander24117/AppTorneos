@@ -180,3 +180,14 @@ export async function crearEquipo(tokenP, cuerpo){
         throw error
     }
 }
+
+export async function traerEquipos(token){
+    try {
+        const url = `${API_HOST}/sport/read/all`
+        const response = await getData(url, token)
+        const result =  response
+        return result 
+    } catch (error) {
+        throw error
+    }
+}

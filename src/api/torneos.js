@@ -196,7 +196,7 @@ export async function traerEquipos(token) {
   }
 }
 
-export async function traerEquiposs(token) {
+export async function traerDeportess(token) {
   try {
     const url = `${API_HOST}/team/read/all`;
     const response = await getData(url, token);

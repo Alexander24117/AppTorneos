@@ -19,6 +19,7 @@ import CreateTorneos from "./src/screens/CreateTorneos";
 import UpdateJugador from "./src/screens/Update/UpdateJugador";
 import UpdateEquipos from "./src/screens/Update/UpdateEquipos";
 import Equipo from "./src/screens/Equipo";
+import Enfrentamientos from './src/screens/Enfrentamientos';
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -74,6 +75,11 @@ export default function App() {
           name="Equipo"
           component={Equipo}
           options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="Enfrentamientos"
+          component={Enfrentamientos}
+          options={{ headerShown: false }}
         />
         {(props) => <HomeScreen {...props} extraData={someData} />}
       </Stack.Navigator>

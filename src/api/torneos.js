@@ -195,7 +195,16 @@ export async function traerEquipos(token) {
     throw error;
   }
 }
-
+export async function traerEquiposs(token) {
+  try {
+    const url = `${API_HOST}/team/read/all`;
+    const response = await getData(url, token);
+    const result = response;
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
 export async function traerDeportess(token) {
   try {
     const url = `${API_HOST}/team/read/all`;

@@ -27,7 +27,7 @@ export default function LoginForm(props) {
         navigation.navigate("Navigation");
       }
     };
-    validarToken();
+    // validarToken();
   }, []);
 
   const { values, isSubmitting, setFieldValue, handleSubmit } = useFormik({

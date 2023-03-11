@@ -14,7 +14,11 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
-import { ActuEquipo, traerInstituciones } from "../../api/torneos";
+import {
+  ActuEquipo,
+  traerInstituciones,
+  traerEquipoById,
+} from "../../api/torneos";
 import JWTManager from "../../api/JWTManager";
 import * as ImagePicker from "expo-image-picker";
 
@@ -25,10 +29,12 @@ export default function UpdateEquipos(props) {
     title = "Actualizar Equipo",
     title2 = "Seleccionar Foto",
     navigation,
+    route: { params },
   } = props;
   const [selectedInsti, setSelectedInsti] = React.useState("");
   const [infoInstitution, setDataInsti] = useState([]);
   const [image, setImage] = useState(null);
+  const [equipo, setEquipo] = useState({});
   useEffect(() => {
     const fetchData = async () => {
       const jwt = await jwtManager.getToken();
@@ -47,7 +53,18 @@ export default function UpdateEquipos(props) {
     };
     fetchData();
   }, []);
-
+  useEffect(() => {
+    const traerEquipo = async () => {
+      const jwt = await jwtManager.getToken();
+      if (!jwt) {
+        return;
+      }
+      const response = await traerEquipoById(jwt, params.id);
+      setEquipo(response.data.Teams);
+    };
+    traerEquipo();
+  }, []);
+  console.log(equipo);
   const pickImage = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({

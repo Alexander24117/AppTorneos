@@ -44,7 +44,7 @@ export default function EquipoCard(props) {
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    height: 100,
+    height: "80%",
   },
   spacing: {
     flex: 1,

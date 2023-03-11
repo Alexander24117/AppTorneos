@@ -2,7 +2,8 @@ import { View, Text, SafeAreaView, StyleSheet } from "react-native";
 import React, { useState, useEffect } from "react";
 import { traerEquipoById } from "../api/torneos";
 import JWTManager from "../api/JWTManager";
-
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 const jwtManager = new JWTManager();
 export default function Equipo(props) {
   const {
@@ -14,7 +15,6 @@ export default function Equipo(props) {
   useEffect(() => {
     (async () => {
       try {
-        console.log(params.id);
         const jwt = await jwtManager.getToken();
         if (!jwt) {
           return;
@@ -27,6 +27,20 @@ export default function Equipo(props) {
       }
     })();
   }, [params]);
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableWithoutFeedback
+          onPress={() =>
+            navigation.navigate("UpdateEquipos", { id: params.id })
+          }
+        >
+          <Ionicons name="ios-pencil-outline" size={38} color="#1d5bad" />
+        </TouchableWithoutFeedback>
+      ),
+    });
+  }, [equipo]);
+
   if (!equipo) return null;
 
   return (

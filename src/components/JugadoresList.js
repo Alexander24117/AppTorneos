@@ -1,11 +1,17 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text } from "react-native";
+import React from "react";
+import JugadorCard from "./JugadorCard";
 
 export default function JugadoresList(props) {
-    const {} = props
+  const { jugadores } = props;
   return (
-    <View>
-      <Text>JugadoresList</Text>
-    </View>
-  )
+    <FlatList
+      data={jugadores}
+      numColumns={2}
+      showsVerticalScrollIndicator={false}
+      keyExtractor={(jugador) => jugador.id.toString()}
+      renderItem={(jugador) => <JugadorCard jugador={jugador} />}
+      contentContainerStyle={styles.flatListContentContainer}
+    />
+  );
 }

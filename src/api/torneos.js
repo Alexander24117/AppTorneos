@@ -233,3 +233,14 @@ export async function traerEquipoById(token, idequipo) {
     throw error;
   }
 }
+
+export async function traerJugadores(token) {
+  try {
+    const url = `${API_HOST}/participant/read/all`;
+    const response = await getData(url, token);
+    const result = response;
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}

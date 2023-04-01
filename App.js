@@ -1,5 +1,5 @@
-import { useNavigation, NavigationContainer } from "@react-navigation/native";
-import "react-native-gesture-handler";
+import { useNavigation, NavigationContainer } from "@react-navigation/native"
+import "react-native-gesture-handler"
 import {
   Text,
   View,
@@ -7,20 +7,21 @@ import {
   TouchableOpacity,
   SafeAreaView,
   StyleSheet,
-} from "react-native";
-import Navigation from "./src/navigation/Navigation";
-import { createStackNavigator } from "@react-navigation/stack";
-import LoginForm from "./src/components/LoginForm";
-import HomeScreen from "./src/screens/HomeScreen";
-import CreateJugador from "./src/screens/CreateJugador";
-import CreateInstitucion from "./src/screens/CreateInstitucion";
-import CreateEquipos from "./src/screens/CreateEquipos";
-import CreateTorneos from "./src/screens/CreateTorneos";
-import UpdateJugador from "./src/screens/Update/UpdateJugador";
-import UpdateEquipos from "./src/screens/Update/UpdateEquipos";
-import Equipo from "./src/screens/Equipo";
-import Enfrentamientos from './src/screens/Enfrentamientos';
-const Stack = createStackNavigator();
+} from "react-native"
+import Navigation from "./src/navigation/Navigation"
+import { createStackNavigator } from "@react-navigation/stack"
+import LoginForm from "./src/components/LoginForm"
+import HomeScreen from "./src/screens/HomeScreen"
+import CreateJugador from "./src/screens/CreateJugador"
+import CreateInstitucion from "./src/screens/CreateInstitucion"
+import CreateEquipos from "./src/screens/CreateEquipos"
+import CreateTorneos from "./src/screens/CreateTorneos"
+import UpdateJugador from "./src/screens/Update/UpdateJugador"
+import UpdateEquipos from "./src/screens/Update/UpdateEquipos"
+import Equipo from "./src/screens/Equipo"
+import Jugador from "./src/screens/Jugador"
+import Enfrentamientos from "./src/screens/Enfrentamientos"
+const Stack = createStackNavigator()
 
 export default function App() {
   return (
@@ -81,8 +82,13 @@ export default function App() {
           component={Enfrentamientos}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="Jugador"
+          component={Jugador}
+          options={{ headerShown: true }}
+        />
         {(props) => <HomeScreen {...props} extraData={someData} />}
       </Stack.Navigator>
     </NavigationContainer>
-  );
+  )
 }

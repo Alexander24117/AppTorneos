@@ -1,17 +1,17 @@
 import { View, Text, SafeAreaView, StyleSheet } from "react-native"
 import React, { useState, useEffect } from "react"
-import { traerEquipoById } from "../api/torneos"
+import { traerJugadorById } from "../api/torneos"
 import JWTManager from "../api/JWTManager"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 const jwtManager = new JWTManager()
-export default function Equipo(props) {
+
+export default function Jugador(props) {
   const {
     navigation,
     route: { params },
   } = props
-  const [equipo, setEquipo] = useState(null)
-
+  const [jugador, setJugador] = useState(null)
   useEffect(() => {
     ;(async () => {
       try {
@@ -19,9 +19,11 @@ export default function Equipo(props) {
         if (!jwt) {
           return
         }
-        const response = await traerEquipoById(jwt, params.id)
-        setEquipo(response.data.Teams)
+        const response = await traerJugadorById(jwt, params.id)
+        setJugador(response.data.Participants)
+        console.log(jugador)
       } catch (error) {
+        console.error(error)
         navigation.goBack()
       }
     })()
@@ -31,45 +33,23 @@ export default function Equipo(props) {
       headerRight: () => (
         <TouchableWithoutFeedback
           onPress={() =>
-            navigation.navigate("UpdateEquipos", { id: params.id })
+            navigation.navigate("UpdateJugadores", { id: params.id })
           }
         >
           <Ionicons name="ios-pencil-outline" size={38} color="#1d5bad" />
         </TouchableWithoutFeedback>
       ),
     })
-  }, [equipo])
-
-  if (!equipo) return null
-
+  }, [jugador])
+  if (!jugador) return null
   return (
-    <>
-      <View style={styles.bg} />
+    <View style={styles.bg}>
       <SafeAreaView style={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.name}>{equipo.name}</Text>
-          <Text style={styles.order}>{equipo.cel_phone}</Text>
-        </View>
-        <Text style={styles.name}>{"Email:" + equipo.email}</Text>
-        <Text style={styles.name}>Partidos:</Text>
-        <View style={styles.body}>
-          <Text style={styles.name}>Perdidos</Text>
-          <Text style={styles.name}>{equipo.matches_lost}</Text>
-        </View>
-        <View style={styles.body}>
-          <Text style={styles.name}>Ganados</Text>
-          <Text style={styles.name}>{equipo.matches_won}</Text>
-        </View>
-        <View style={styles.body}>
-          <Text style={styles.name}>Empatados</Text>
-          <Text style={styles.name}>{equipo.matches_tied}</Text>
-        </View>
-        <View style={styles.body}>
-          <Text style={styles.name}>Jugados</Text>
-          <Text style={styles.name}>{equipo.matches_played}</Text>
+        <View style={styles.content}>
+          <Text style={styles.name}> {jugador.surnames}</Text>
         </View>
       </SafeAreaView>
-    </>
+    </View>
   )
 }
 const styles = StyleSheet.create({

@@ -2,6 +2,7 @@ import { SafeAreaView, Text, StyleSheet } from "react-native";
 import React, { useEffect } from "react";
 import { traerJugadores } from "../api/torneos";
 import JugadoresList from "../components/JugadoresList";
+import * as SecureStore from "expo-secure-store";
 
 export default function Jugadores() {
   const [jugadores, setJugadores] = React.useState([]);
@@ -10,8 +11,10 @@ export default function Jugadores() {
       const jwt = await SecureStore.getItemAsync("token");
       const response = await traerJugadores(jwt);
       if (response) {
-        await setJugadores(response.Players);
+        await setJugadores(response.Participants);
       }
+
+      setJugadores(response.Participants);
     };
     getJugadores();
   }, []);

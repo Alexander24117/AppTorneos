@@ -1,5 +1,6 @@
-import { View, Text, TouchableWithoutFeedback } from "react-native";
+import { View, Text, TouchableWithoutFeedback, StyleSheet } from "react-native";
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 
 export default function JugadorCard(props) {
   const { jugador } = props;
@@ -13,7 +14,7 @@ export default function JugadorCard(props) {
         <View style={styles.spacing}>
           <View style={styles.bgStyles}>
             <Text style={styles.name}>
-              {jugador.item.name + " " + jugador.item.surnames}
+              {jugador.item.names + " " + jugador.item.surnames}
             </Text>
           </View>
           <View>

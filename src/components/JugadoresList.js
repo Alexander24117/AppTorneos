@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 import React from "react";
 import JugadorCard from "./JugadorCard";
 
@@ -15,3 +15,8 @@ export default function JugadoresList(props) {
     />
   );
 }
+const styles = StyleSheet.create({
+  flatListContentContainer: {
+    paddingHorizontal: 5,
+  },
+});

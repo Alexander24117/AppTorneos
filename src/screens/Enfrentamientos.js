@@ -14,6 +14,7 @@ import {
   Button
 } from "react-native";
 import { Formik } from "formik";
+
 import React, { useState, useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
 import { crearEquipo, traerInstituciones } from "../api/torneos";
@@ -64,14 +65,14 @@ export default function Enfrentamientos(props){
     <>
     <SafeAreaView>
       <ScrollView style={styles.scroll}>
-        
-    <View  style={styles.container}  >
-      
-    <Image
+      <View  style={styles.container}  >
+      <View style={styles.bg} />
+      <Image
             style={{ width: 350, height: 300, marginBottom: 10 }}
             source={require("../../assets/logojugadores.png")}
           />
-
+      </View>
+    <View  style={styles.container}  >
       <Text style={styles.titulo}>Digite los datos del enfrentamiento</Text>
 
       <TextInput      
@@ -93,39 +94,45 @@ export default function Enfrentamientos(props){
         value={values.hour}
         placeholder="Hora"
       />
-      <Text style={styles.tituloE}>Equipo 1</Text>
 
+      
+      <Text style={styles.tituloE}>Equipo 1</Text>
+      <View style ={styles.DPoints}>
       <TextInput
-        style={styles.textInput}
+        style={styles.textInputPoints}
         onChangeText={handleChange('teams.0.points')}
         value={values.teams[teamIndex1].points}
         placeholder="Puntos"
       />
       <TextInput
-        style={styles.textInput}
+        style={styles.textInputPoints}
         onChangeText={handleChange('teams.0.penalties_points')}
         value={values.teams[teamIndex1].penalties_points}
         placeholder="Penaltis"
       />
+      </View>
+      <View
+      style={styles.separador}
+        />
 
-      <Text style={styles.VS}>VS</Text>
-
+      <Text style={styles.tituloE}>Equipo 2</Text>
+      <View style ={styles.DPoints}>
       <TextInput
-        style={styles.textInput}
+        style={styles.textInputPoints}
         onChangeText={handleChange('teams.1.points')}
         value={values.teams[teamIndex2].points}
         placeholder="Puntos"
       />
 
       <TextInput
-        style={styles.textInput}
+        style={styles.textInputPoints}
         onChangeText={handleChange('teams.1.penalties_points')}
         value={values.teams[teamIndex2].penalties_points}
         placeholder="Penaltis"
       />
+      </View>
 
-      <Text style={styles.tituloE}>Equipo 2</Text>
-
+      
       <Pressable style={styles.button} onPress={handleSubmit}>
             <Text style={styles.text}>{title}</Text>
           </Pressable>
@@ -144,6 +151,7 @@ export default function Enfrentamientos(props){
 const styles = StyleSheet.create({
   container: {
     marginTop: 40,
+    marginBottom:10,
     backgroundColor: "#f1f1f1",
     alignItems: "center",
     justifyContent: "center",
@@ -161,14 +169,14 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 20,
-    marginBottom: 20,
+    marginBottom: 10,
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: "#074CBD",
+    backgroundColor: "#003d7c",
     borderRadius: 25,
     width: "80%",
     height: 50,
@@ -182,7 +190,7 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 20,
-    marginTop: 10,
+    marginTop: 20,
   },
   scroll: {
     marginHorizontal: 0.1,
@@ -198,8 +206,28 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   tituloE: {
-    fontSize: 50,
+    fontSize: 40,
     marginTop: 10,
+  },
+  separador:{
+    height: 1,
+    borderBottomColor: '#FF0000',
+    marginVertical: 10,
+  },
+  DPoints: {
+    flexDirection:'row',
+  },
+  textInputPoints: {
+    borderWidth: 1,
+    borderColor: "blue",
+    padding: 10,
+    paddingStart: 25,
+    width: "40%",
+    height: 50,
+    marginTop: 20,
+    borderRadius: 25,
+    backgroundColor: "#fff",
+    marginRight: 10
   },
   bg: {
     width: "100%",
@@ -207,7 +235,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     borderBottomEndRadius: 300,
     borderBottomLeftRadius: 300,
-    backgroundColor: "#07162a",
+    backgroundColor: "#003d7c",
     transform: [{ scaleX: 2 }],
-  }
+  },
 });

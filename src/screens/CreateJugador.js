@@ -9,11 +9,13 @@ import {
   Button,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { saveJugador, crearParticipantes } from "../api/torneos";
+import { saveJugador, crearParticipantes, traerEquiposs, 
+  traerEquipoByInsti, departamentos, ciudadesPorDepartment, 
+  traerInstituciones } 
+from "../api/torneos";
 import { useFormik } from "formik";
 import { ScrollView } from "react-native-gesture-handler";
 import { SelectList } from "react-native-dropdown-select-list";
-import { departamentos, ciudadesPorDepartment } from "../api/torneos";
 import JWTManager from "../api/JWTManager";
 import * as SecureStore from "expo-secure-store";
 import * as ImagePicker from "expo-image-picker";
@@ -32,6 +34,13 @@ export default function CreateJugador(props) {
   const [selectedDeparment, setSelectedDeparment] = React.useState("");
   const [selectedCiudad, setselectedCiudad] = React.useState("");
   const [image, setImage] = useState(null);
+
+  const [infoEquipos, setDataEquipo] = useState([]);
+  const [selectedEquipo, setSelectedEquipo] = React.useState("");
+
+  const [infoInstitution, setDataInsti] = useState([]);
+  const [selectedInsti, setSelectedInsti] = React.useState("");
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,6 +83,46 @@ export default function CreateJugador(props) {
     fetchMunicipios();
   }, [selectedDeparment]);
 
+
+  useEffect(() => {
+    const traerInsti = async () => {
+      const jwt = await jwtManager.getToken();
+      if (!jwt) {
+        return;
+      }
+      const response = await traerInstituciones(jwt);
+      setDataInsti(
+        response.Institutions.map((item) => {
+          return {
+            key: item.id,
+            value: item.name,
+          };
+        })
+      );
+    };
+    traerInsti();
+  }, []);
+
+  useEffect(() => {
+    const traerEquipo = async () => {
+      const jwt = await jwtManager.getToken();
+      if (!jwt) {
+        return;
+      }
+      const response = await traerEquipoByInsti(jwt, selectedInsti);
+      console.log(response);
+      setDataEquipo(
+      response.data.teams.map((item) => {
+        return{
+          key: item.team_id,
+          value: item.institution_team
+        };
+      })
+      );
+    };
+    traerEquipo();
+  }, [selectedInsti]);
+
   const handleDepartamentoChange = (departamento) => {
     console.log(selectedDeparment, "depar selected");
     fetchMunicipios(selectedDeparment).then((data) => setMunicipios(data));
@@ -109,6 +158,7 @@ export default function CreateJugador(props) {
       cel_phone: "",
       email: "",
       date_birth: "",
+      team_id: "",
       image_64: "",
       state: 1,
     },
@@ -119,16 +169,19 @@ export default function CreateJugador(props) {
   });
   values.fk_departments_id = selectedDeparment;
   values.fk_cities_id = selectedCiudad;
+  values.team_id = selectedEquipo
   const data = infoCiudad;
   return (
     <SafeAreaView>
       <ScrollView style={styles.scroll}>
-        <View style={styles.container}>
-          <Image
+      <View  style={styles.container}  >
+      <View style={styles.bg} />
+      <Image
             style={{ width: 350, height: 300, marginBottom: 10 }}
             source={require("../../assets/logojugadores.png")}
           />
-
+      </View>
+       <View  style={styles.container}  >
           <Text style={styles.titulo}>Digite los datos</Text>
           <TextInput
             style={styles.textInput}
@@ -202,6 +255,39 @@ export default function CreateJugador(props) {
                 placeholder="Ciudad"
               />
 
+            <View style={{ paddingVertical: 20, paddingBottom: -10, width: 320 }}>
+            <SelectList
+              setSelected={(val) => setSelectedInsti(val)}
+              data={infoInstitution}
+              save="key"
+              inputStyles={{
+                marginHorizontal: 40,
+                color: "blue",
+                backgroundColor: "#ffff",
+              }}
+              boxStyles={{ borderColor: "blue", backgroundColor: "#ffff" }}
+              search={{ placeholder: "aaaaaaaaa" }}
+              placeholder="Institucion"
+              keyExtractor={(item) => item.key}
+            />
+            </View>
+          <View style={{ paddingVertical: 20, paddingBottom: -10, width: 320 }}>
+            <SelectList
+              setSelected={(val) => setSelectedEquipo(val)}
+              data={infoEquipos}
+              save="key"
+              inputStyles={{
+                marginHorizontal: 40,
+                color: "blue",
+                backgroundColor: "#ffff",
+              }}
+              boxStyles={{ borderColor: "blue", backgroundColor: "#ffff" }}
+              search={{ placeholder: "aaaaaaaaa" }}
+              placeholder="Equipo"
+              keyExtractor={(item) => item.key}
+            />
+          </View>
+
               <View style={styles.FotoButton}>
                 <Pressable style={styles.button} onPress={pickImage}>
                   <Text style={styles.text}>{title2}</Text>
@@ -230,6 +316,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f1f1f1",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom:20,
   },
   textInput: {
     borderWidth: 1,
@@ -251,7 +338,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: "#074CBD",
+    backgroundColor: "#003d7c",
     borderRadius: 25,
     width: "80%",
     height: 50,
@@ -276,5 +363,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  bg: {
+    width: "100%",
+    height: 400,
+    position: "absolute",
+    borderBottomEndRadius: 300,
+    borderBottomLeftRadius: 300,
+    backgroundColor: "#003d7c",
+    transform: [{ scaleX: 2 }],
   },
 });

@@ -65,13 +65,14 @@ export default function CreateTorneos(props) {
     <SafeAreaView>
 
         <ScrollView style = {styles.scroll}>
-        <View style = {styles.container}>
-
-        <Image
-          style={{ width: 350, height: 300, marginBottom: 10}}
-          
-          source={require("../../assets/logojugadores.png")}
-        />
+        <View  style={styles.container}  >
+      <View style={styles.bg} />
+      <Image
+            style={{ width: 350, height: 300, marginBottom: 10 }}
+            source={require("../../assets/logojugadores.png")}
+          />
+      </View>
+    <View  style={styles.container}  > 
        
         <Text style = {styles.titulo} >Digite los datos</Text>
         <TextInput 
@@ -156,6 +157,7 @@ export default function CreateTorneos(props) {
 const styles = StyleSheet.create({
     container:{
         marginTop: 40,
+        marginBottom:10,
         backgroundColor: '#f1f1f1',
         alignItems: 'center',   
         justifyContent: 'center',
@@ -198,5 +200,14 @@ const styles = StyleSheet.create({
     scroll:{
       marginHorizontal: 0.1,
 
-    }
+    },
+    bg: {
+      width: "100%",
+      height: 400,
+      position: "absolute",
+      borderBottomEndRadius: 300,
+      borderBottomLeftRadius: 300,
+      backgroundColor: "#003d7c",
+      transform: [{ scaleX: 2 }],
+    },
 })

@@ -34,7 +34,7 @@ export default function UpdateEquipos(props) {
   const [selectedInsti, setSelectedInsti] = React.useState("");
   const [infoInstitution, setDataInsti] = useState([]);
   const [image, setImage] = useState(null);
-  const [equipo, setEquipo] = useState({});
+  let [equipo, setEquipo] = useState({});
   useEffect(() => {
     const fetchData = async () => {
       const jwt = await jwtManager.getToken();
@@ -60,11 +60,25 @@ export default function UpdateEquipos(props) {
         return;
       }
       const response = await traerEquipoById(jwt, params.id);
-      setEquipo(response.data.Teams);
+      console.log(response.data.Teams);
+      setEquipo(
+        {
+          id: response.data.Teams.id,
+          name: response.data.Teams.name,
+          fk_institutions_id: response.data.Teams.fk_institutions_id,
+          cel_phone: response.data.Teams.cel_phone,
+          landline: response.data.Teams.landline,
+          email: response.data.Teams.email,
+          matches_played: response.data.Teams.matches_played,
+          matches_won: response.data.Teams.matches_won,
+          matches_tied: response.data.Teams.matches_tied,
+          matches_lost: response.data.Teams.matches_lost,
+          image_64: response.data.Teams.image_path
+        }
+      );
     };
     traerEquipo();
   }, []);
-  console.log(equipo);
   const pickImage = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -76,37 +90,69 @@ export default function UpdateEquipos(props) {
       });
       if (!result.canceled) {
         setImage(result.assets[0].uri);
-        values.image_64 = "data:image/png;base64," + result.assets[0].base64;
+        onChangeImage("data:image/png;base64," + result.assets[0].base64)
       } else {
-        values.image_64 = null;
+        equipo.image_64 = null;
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const { values, isSubmitting, setFieldValue, handleSubmit } = useFormik({
-    initialValues: {
-      name: "",
-      fk_institutions_id: "",
-      cel_phone: "",
-      landline: "",
-      email: "",
-      date_birth: "",
-      matches_played: 0,
-      matches_won: 0,
-      matches_tied: 0,
-      matches_lost: 0,
-      state: 1,
-      image_64: "",
-    },
-    onSubmit: async (values) => {
-      console.log(values);
-      const token = await SecureStore.getItemAsync("token");
-      crearEquipo(token, values);
-    },
-  });
-  values.fk_institutions_id = selectedInsti;
+  const onChangeName = (value) => {
+    setEquipo({ ...equipo, name: value });
+  };
+
+  const onChangePhone = (value) => {
+    setEquipo({ ...equipo, cel_phone: value });
+  };
+
+  const onChangeLandline = (value) => {
+    setEquipo({ ...equipo, landline: value });
+  };
+
+  const onChangeEmail = (value) => {
+    setEquipo({ ...equipo, email: value });
+  };
+
+  const onChangeImage = (value) => {
+    setEquipo({ ...equipo, image_64: value });
+  };
+
+  
+
+
+  const updateData = async ()=> {
+     const jwt = await jwtManager.getToken();
+       if (!jwt) {
+         return;
+       }
+       console.log(equipo);
+       const response = ActuEquipo(jwt, equipo)
+      console.log(equipo);
+  }
+
+  // const { values, isSubmitting, setFieldValue, handleSubmit } = useFormik({
+  //   initialValues: {
+  //     name: "",
+  //     fk_institutions_id: "",
+  //     cel_phone: "",
+  //     landline: "",
+  //     email: "",
+  //     matches_played: 0,
+  //     matches_won: 0,
+  //     matches_tied: 0,
+  //     matches_lost: 0,
+  //     state: 1,
+  //     image_64: "",
+  //   },
+  //   onSubmit: async (values) => {
+  //     console.log(values);
+  //     //const token = await SecureStore.getItemAsync("token");
+  //     //crearEquipo(token, values);
+  //   },
+  // });
+  equipo.fk_institutions_id = selectedInsti;
   return (
     <SafeAreaView>
       <ScrollView style={styles.scroll}>
@@ -119,37 +165,32 @@ export default function UpdateEquipos(props) {
           <Text style={styles.titulo}>Digite los datos</Text>
 
           <TextInput
+            
             style={styles.textInput}
-            value={values.name}
-            onChangeText={(text) => setFieldValue("name", text)}
-            placeholder="Nombre del equipo"
+            value={equipo.name}
+            onChangeText={(value) => onChangeName(value)}
+            placeholder="Nombre"
           />
 
           <TextInput
             style={styles.textInput}
-            value={values.cel_phone}
-            onChangeText={(text) => setFieldValue("cel_phone", text)}
+            value={equipo.cel_phone}
+            onChangeText={(value) => onChangePhone(value)}
             placeholder="Telefono"
           />
 
           <TextInput
             style={styles.textInput}
-            value={values.landline}
-            onChangeText={(text) => setFieldValue("landline", text)}
+            value={equipo.landline}
+            onChangeText={(value) => onChangeLandline(value)}
             placeholder="landline"
           />
 
           <TextInput
             style={styles.textInput}
-            value={values.email}
-            onChangeText={(text) => setFieldValue("email", text)}
+            value={equipo.email}
+            onChangeText={(value) => onChangeEmail(value)}
             placeholder="Email"
-          />
-          <TextInput
-            style={styles.textInput}
-            value={values.date_birth}
-            onChangeText={(text) => setFieldValue("date_birth", text)}
-            placeholder="Fecha de nacimiento"
           />
 
           <View style={{ paddingVertical: 20, paddingBottom: -10, width: 320 }}>
@@ -180,7 +221,7 @@ export default function UpdateEquipos(props) {
             )}
           </View>
 
-          <Pressable style={styles.button} onPress={handleSubmit}>
+          <Pressable style={styles.button} onPress={updateData}>
             <Text style={styles.text}>{title}</Text>
           </Pressable>
         </View>

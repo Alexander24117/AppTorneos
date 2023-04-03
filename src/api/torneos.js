@@ -262,3 +262,62 @@ export async function traerJugadorById(token, idjugador) {
     throw error
   }
 }
+
+export async function traerJugadorById(token, idejugador) {
+  try {
+    const url = `${API_HOST}/participant/read/id`;
+    const response = await axios.put(
+      url,
+      { id: idejugador },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const result = response;
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function ActuEquipo(token, equipo){
+try{
+  const url = `${API_HOST}/team/update`;
+  const response = await axios.put(
+    url,
+    equipo,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  const result = response;
+  return result;
+}
+catch(error){
+  throw error;
+}
+
+}
+
+export async function traerEquipoByInsti(token, idInst) {
+  try {
+    const url = `${API_HOST}/team/read/with/institution`;
+    const response = await axios.get(
+      url,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: { id_institution: idInst }
+      }
+    );
+    const result = response;
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}

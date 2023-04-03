@@ -21,7 +21,6 @@ export default function Jugador(props) {
         }
         const response = await traerJugadorById(jwt, params.id)
         setJugador(response.data.Participants)
-        console.log(jugador)
       } catch (error) {
         console.error(error)
         navigation.goBack()
@@ -33,7 +32,7 @@ export default function Jugador(props) {
       headerRight: () => (
         <TouchableWithoutFeedback
           onPress={() =>
-            navigation.navigate("UpdateJugadores", { id: params.id })
+            navigation.navigate("UpdateJugador", { id: params.id })
           }
         >
           <Ionicons name="ios-pencil-outline" size={38} color="#1d5bad" />
@@ -43,13 +42,18 @@ export default function Jugador(props) {
   }, [jugador])
   if (!jugador) return null
   return (
-    <View style={styles.bg}>
+    <>
+      <View style={styles.bg} />
       <SafeAreaView style={styles.content}>
         <View style={styles.content}>
           <Text style={styles.name}> {jugador.surnames}</Text>
+          <Text style={styles.name}> {jugador.names}</Text>
+          <Text style={styles.name}> {jugador.email}</Text>
+          <Text style={styles.name}> {jugador.cel_phone}</Text>
+          <Text style={styles.name}> {jugador.identification}</Text>
         </View>
       </SafeAreaView>
-    </View>
+    </>
   )
 }
 const styles = StyleSheet.create({

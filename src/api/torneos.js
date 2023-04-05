@@ -263,9 +263,9 @@ export async function traerJugadorById(token, idjugador) {
   }
 }
 
-export async function traerJugadorById(token, idejugador) {
+export async function traerJugadorById2(token, idejugador) {
   try {
-    const url = `${API_HOST}/participant/read/id`;
+    const url = `${API_HOST}/participant/read/id`
     const response = await axios.put(
       url,
       { id: idejugador },
@@ -274,50 +274,56 @@ export async function traerJugadorById(token, idejugador) {
           Authorization: `Bearer ${token}`,
         },
       }
-    );
-    const result = response;
-    return result;
+    )
+    const result = response
+    return result
   } catch (error) {
-    throw error;
+    throw error
   }
 }
 
-export async function ActuEquipo(token, equipo){
-try{
-  const url = `${API_HOST}/team/update`;
-  const response = await axios.put(
-    url,
-    equipo,
-    {
+export async function ActuEquipo(token, equipo) {
+  try {
+    const url = `${API_HOST}/team/update`
+    const response = await axios.put(url, equipo, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
-  );
-  const result = response;
-  return result;
-}
-catch(error){
-  throw error;
-}
-
+    })
+    const result = response
+    return result
+  } catch (error) {
+    throw error
+  }
 }
 
 export async function traerEquipoByInsti(token, idInst) {
   try {
-    const url = `${API_HOST}/team/read/with/institution`;
-    const response = await axios.get(
-      url,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: { id_institution: idInst }
-      }
-    );
-    const result = response;
-    return result;
+    const url = `${API_HOST}/team/read/with/institution`
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: { id_institution: idInst },
+    })
+    const result = response
+    return result
   } catch (error) {
-    throw error;
+    throw error
+  }
+}
+export async function traerTorneos(token) {
+  try {
+    const url = `${API_HOST}/tournaments/read/front/filter`
+    const response = await axios.put(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: { stage_id: "", institution_id: "", team_id: "" },
+    })
+    const result = response.data
+    return result
+  } catch (error) {
+    throw error
   }
 }

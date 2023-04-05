@@ -327,3 +327,25 @@ export async function traerTorneos(token) {
     throw error
   }
 }
+
+
+export async function ActuJugador(token, equipo){
+  try{
+    const url = `${API_HOST}/participant/update`;
+    const response = await axios.put(
+      url,
+      equipo,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const result = response;
+    return result;
+  }
+  catch(error){
+    throw error;
+  }
+  
+  }

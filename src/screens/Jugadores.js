@@ -29,6 +29,6 @@ const styles = StyleSheet.create({
   content: {
     marginHorizontal: 0,
     marginTop: 30,
-    backgroundColor: "#07162a",
+    backgroundColor: "#FFFFF",
   },
 });

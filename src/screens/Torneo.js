@@ -4,16 +4,19 @@ import {
   SafeAreaView,
   StyleSheet,
   ActivityIndicator,
+  ScrollView,
 } from "react-native"
 import React, { useState, useEffect } from "react"
 import {
   traerTorneoById,
   traerDeportess,
   traerTipoTorneo,
+  traerTablaPuntosTorneo,
 } from "../api/torneos"
 import JWTManager from "../api/JWTManager"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
+import TablaPuntos from "./TablaPuntos"
 const jwtManager = new JWTManager()
 
 export default function Torneo(props) {
@@ -24,6 +27,22 @@ export default function Torneo(props) {
   const [torneo, setTorneo] = useState(null)
   const [deportes, setDeportes] = useState(null)
   const [tipoTorneo, setTipoTorneo] = useState(null)
+  const [tableData, setTableData] = useState(null)
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const jwt = await jwtManager.getToken()
+        if (!jwt) {
+          return
+        }
+
+        const table = await traerTablaPuntosTorneo(jwt, params.id)
+        setTableData(table.data.table)
+      } catch (error) {
+        console.error(error)
+      }
+    })()
+  }, [params])
   useEffect(() => {
     ;(async () => {
       try {
@@ -92,10 +111,15 @@ export default function Torneo(props) {
       <SafeAreaView style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.name}>{torneo.name}</Text>
+          <Text style={styles.order}>Fecha de Inicio: {torneo.start_date}</Text>
           <Text style={styles.order}>{torneo.sport_name}</Text>
         </View>
-        {deporte && <Text style={styles.name}>{deporte.name}</Text>}
-        {tipoDeTorneo && <Text style={styles.name}>{tipoDeTorneo.name}</Text>}
+        {deporte && <Text style={styles.name}>Deporte: {deporte.name}</Text>}
+        {tipoDeTorneo && (
+          <Text style={styles.name}>Categoria: {tipoDeTorneo.name}</Text>
+        )}
+        <View style={styles.spacer}></View>
+        <TablaPuntos data={tableData} />
       </SafeAreaView>
     </>
   )
@@ -103,7 +127,7 @@ export default function Torneo(props) {
 const styles = StyleSheet.create({
   bg: {
     width: "100%",
-    height: 400,
+    height: 280,
     position: "absolute",
     borderBottomEndRadius: 300,
     borderBottomLeftRadius: 300,
@@ -111,6 +135,7 @@ const styles = StyleSheet.create({
     transform: [{ scaleX: 2 }],
   },
   content: {
+    flex: 1,
     marginHorizontal: 20,
     marginTop: 30,
   },
@@ -138,5 +163,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  spacer: {
+    height: "20%", // Ajusta este valor según el espacio deseado
   },
 })

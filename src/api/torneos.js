@@ -345,6 +345,7 @@ export async function ActuJugador(token, equipo) {
 
 export async function traerTablaPuntosTorneo(token, idTorneo) {
   try {
+    console.log(idTorneo, "idTorneo")
     const url = `${API_HOST}/tournaments/read/table/team/points`
     const response = await axios.put(
       url,

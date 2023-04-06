@@ -4,16 +4,16 @@ import {
   Text,
   Image,
   TouchableWithoutFeedback,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import React from "react";
+} from "react-native"
+import { useNavigation } from "@react-navigation/native"
+import React from "react"
 
 export default function EquipoCard(props) {
-  const { equipo } = props;
-  const navigation = useNavigation();
+  const { equipo } = props
+  const navigation = useNavigation()
   const irEquipo = () => {
-    navigation.navigate("Equipo", { id: equipo.item.id });
-  };
+    navigation.navigate("Equipo", { id: equipo.item.id })
+  }
   return (
     <TouchableWithoutFeedback onPress={irEquipo}>
       <View style={styles.card}>
@@ -39,7 +39,7 @@ export default function EquipoCard(props) {
         </View>
       </View>
     </TouchableWithoutFeedback>
-  );
+  )
 }
 const styles = StyleSheet.create({
   card: {
@@ -68,4 +68,4 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     textAlign: "left",
   },
-});
+})

@@ -1,10 +1,16 @@
-import { View, Text, SafeAreaView, StyleSheet , TouchableOpacity} from "react-native"
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native"
 import React, { useState, useEffect } from "react"
 import { traerEquipoById, eliminarEquipo } from "../api/torneos"
 import JWTManager from "../api/JWTManager"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
-import Modal from 'react-native-modal';
+import Modal from "react-native-modal"
 
 const jwtManager = new JWTManager()
 export default function Equipo(props) {
@@ -14,28 +20,27 @@ export default function Equipo(props) {
   } = props
   const [equipo, setEquipo] = useState(null)
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false)
   const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
-
-  const eliminar = async() => {
-    try {
-        const jwt = await jwtManager.getToken()
-        if (!jwt) {
-          return
-        }
-        const response = await eliminarEquipo(jwt, equipo.id)
-        console.log(response);
-        if(response.message == "Equipo desactivado."){
-          navigation.goBack()
-        }
-      } catch (error) {
-        console.error(error)
-        navigation.goBack()
-      }
+    setModalVisible(!isModalVisible)
   }
 
+  const eliminar = async () => {
+    try {
+      const jwt = await jwtManager.getToken()
+      if (!jwt) {
+        return
+      }
+      const response = await eliminarEquipo(jwt, equipo.id)
+      console.log(response)
+      if (response.message == "Equipo desactivado.") {
+        navigation.goBack()
+      }
+    } catch (error) {
+      console.error(error)
+      navigation.goBack()
+    }
+  }
 
   useEffect(() => {
     ;(async () => {
@@ -51,41 +56,29 @@ export default function Equipo(props) {
       }
     })()
   }, [params])
-  // useEffect(() => {
-  //   navigation.setOptions({
-  //     headerRight: () => (
-  //       <TouchableWithoutFeedback
-  //         onPress={() =>
-  //           navigation.navigate("UpdateEquipos", { id: params.id })
-  //         }
-  //       >
-  //         <Ionicons name="ios-pencil-outline" size={38} color="#1d5bad" style={{ marginRight : 10}}/>
-  //       </TouchableWithoutFeedback>
-  //     ),
-  //   })
-  // }, [equipo])
-
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <View style={styles.headerRightContainer}>
           <TouchableWithoutFeedback
-            onPress={() => navigation.navigate("UpdateEquipo", { id: params.id })}
+            onPress={() =>
+              navigation.navigate("UpdateEquipo", { id: params.id })
+            }
           >
             <Ionicons name="ios-pencil-outline" size={38} color="#1d5bad" />
           </TouchableWithoutFeedback>
-  
+
           <TouchableWithoutFeedback
             onPress={() => {
-              setModalVisible(true);
+              setModalVisible(true)
             }}
           >
             <Ionicons name="ios-remove-outline" size={38} color="#1d5bad" />
           </TouchableWithoutFeedback>
         </View>
       ),
-    });
-  }, [equipo]);
+    })
+  }, [equipo])
 
   if (!equipo) return null
 
@@ -116,24 +109,27 @@ export default function Equipo(props) {
           <Text style={styles.name}>{equipo.matches_played}</Text>
         </View>
 
-
         <Modal
           isVisible={modalVisible}
           onBackdropPress={() => setModalVisible(false)}
         >
-          <View style={{ backgroundColor: 'white', padding: 20 }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+          <View style={{ backgroundColor: "white", padding: 20 }}>
+            <Text
+              style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}
+            >
               ¿Está seguro que desea eliminar al jugador?
             </Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <Text style={{ color: 'red', marginRight: 10 }}>Cancelar</Text>
+                <Text style={{ color: "red", marginRight: 10 }}>Cancelar</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={async() => {
-                 await eliminar();
-                setModalVisible(false);
-              }}>
-                <Text style={{ color: 'blue' }}>Aceptar</Text>
+              <TouchableOpacity
+                onPress={async () => {
+                  await eliminar()
+                  setModalVisible(false)
+                }}
+              >
+                <Text style={{ color: "blue" }}>Aceptar</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -181,6 +177,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingRight: 10,
-    width: 100, 
+    width: 100,
   },
 })

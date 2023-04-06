@@ -376,10 +376,17 @@ export async function traerTorneoById(token, idTorneo) {
   }
 }
 
-export async function traerTipoTorneo(token) {
+export async function traerTipoTorneo(token, tipoTorneo) {
   try {
-    const url = `${API_HOST}/tournament_type/read/all`
-    const response = await getData(url, token)
+    console.log(tipoTorneo)
+    const url = `${API_HOST}/type/tournament/read/all`
+    const response = await axios.put(
+      url,
+      { id_sport_selected: tipoTorneo },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
     const result = response
     return result
   } catch (error) {

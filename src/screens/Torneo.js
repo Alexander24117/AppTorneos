@@ -33,17 +33,29 @@ export default function Torneo(props) {
         }
         const torneoRequest = await traerTorneoById(jwt, params.id)
         const derporteRequest = await traerDeportess(jwt)
-        const tipoTorneoRequest = await traerTipoTorneo(jwt)
-        const [torneoResponse, derporteResponse, tipoTorneoResponse] =
-          await Promise.all([torneoRequest, derporteRequest, tipoTorneoRequest])
-
+        const [torneoResponse, derporteResponse] = await Promise.all([
+          torneoRequest,
+          derporteRequest,
+        ])
+        const deportesFiltrados = derporteResponse.sports.map((deporte) => ({
+          id: deporte.id,
+          name: deporte.name,
+        }))
         setTorneo(torneoResponse.data.Tournament)
-        setDeportes(
-          derporteResponse.sports.map((deporte) => ({
-            id: deporte.id,
-            name: deporte.name,
-          }))
+        setDeportes(deportesFiltrados)
+        const tiposTorneoResponse = await traerTipoTorneo(
+          jwt,
+          torneoResponse.data.Tournament.fk_sports_id
         )
+
+        const tiposTorneoFiltrados = tiposTorneoResponse.data.types.map(
+          (tipoTorneo) => ({
+            id: tipoTorneo.id,
+            name: tipoTorneo.name,
+          })
+        )
+
+        setTipoTorneo(tiposTorneoFiltrados)
       } catch (error) {
         console.error(error)
         navigation.goBack()
@@ -62,7 +74,8 @@ export default function Torneo(props) {
       ),
     })
   }, [torneo])
-  if (!torneo || !deportes) {
+
+  if (!torneo || !deportes || !tipoTorneo) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#1d5bad" />
@@ -70,6 +83,9 @@ export default function Torneo(props) {
     )
   }
   const deporte = deportes.find((d) => d.id === torneo.fk_sports_id)
+  const tipoDeTorneo = tipoTorneo.find(
+    (d) => d.id === torneo.fk_types_tournament_id
+  )
   return (
     <>
       <View style={styles.bg} />
@@ -79,6 +95,7 @@ export default function Torneo(props) {
           <Text style={styles.order}>{torneo.sport_name}</Text>
         </View>
         {deporte && <Text style={styles.name}>{deporte.name}</Text>}
+        {tipoDeTorneo && <Text style={styles.name}>{tipoDeTorneo.name}</Text>}
       </SafeAreaView>
     </>
   )

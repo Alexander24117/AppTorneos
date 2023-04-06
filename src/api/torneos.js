@@ -432,3 +432,25 @@ export async function eliminarEquipo(token, idequipo) {
     throw error
   }
 }
+
+export async function traerEnfrentamientosPorTorneo(toker, idTorneo) {
+  try {
+    const url = `${API_HOST}/matchup/read/data/all`
+    const response = await axios.put(
+      url,
+      {
+        tournament_id: idTorneo,
+        team_id: null,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${toker}`,
+        },
+      }
+    )
+    const result = response.data
+    return result
+  } catch (error) {
+    throw error
+  }
+}

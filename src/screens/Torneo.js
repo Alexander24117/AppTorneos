@@ -12,11 +12,13 @@ import {
   traerDeportess,
   traerTipoTorneo,
   traerTablaPuntosTorneo,
+  traerEnfrentamientosPorTorneo,
 } from "../api/torneos"
 import JWTManager from "../api/JWTManager"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 import TablaPuntos from "./TablaPuntos"
+import MatchupTable from "./MatchupTable"
 const jwtManager = new JWTManager()
 
 export default function Torneo(props) {
@@ -28,6 +30,7 @@ export default function Torneo(props) {
   const [deportes, setDeportes] = useState(null)
   const [tipoTorneo, setTipoTorneo] = useState(null)
   const [tableData, setTableData] = useState(null)
+  const [enfrentamientos, setEnfrentamientos] = useState(null)
   useEffect(() => {
     ;(async () => {
       try {
@@ -38,6 +41,11 @@ export default function Torneo(props) {
 
         const table = await traerTablaPuntosTorneo(jwt, params.id)
         setTableData(table.data.table)
+        const enfrentamientosResponse = await traerEnfrentamientosPorTorneo(
+          jwt,
+          params.id
+        )
+        setEnfrentamientos(enfrentamientosResponse.Enfrentamientos)
       } catch (error) {
         console.error(error)
       }
@@ -94,7 +102,7 @@ export default function Torneo(props) {
     })
   }, [torneo])
 
-  if (!torneo || !deportes || !tipoTorneo) {
+  if (!torneo || !deportes || !tipoTorneo || !enfrentamientos) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#1d5bad" />
@@ -119,7 +127,10 @@ export default function Torneo(props) {
           <Text style={styles.name}>Categoria: {tipoDeTorneo.name}</Text>
         )}
         <View style={styles.spacer}></View>
-        <TablaPuntos data={tableData} />
+        {tipoDeTorneo.name === "CLASIFICATORIA" ? (
+          <TablaPuntos data={tableData} />
+        ) : null}
+        <MatchupTable data={enfrentamientos} />
       </SafeAreaView>
     </>
   )
@@ -133,6 +144,10 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 300,
     backgroundColor: "#07162a",
     transform: [{ scaleX: 2 }],
+  },
+  container: {
+    flex: 1,
+    paddingBottom: 10,
   },
   content: {
     flex: 1,

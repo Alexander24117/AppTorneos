@@ -393,3 +393,41 @@ export async function traerTipoTorneo(token, tipoTorneo) {
     throw error
   }
 }
+
+export async function eliminarJugador(token, idjugador) {
+  try {
+    const url = `${API_HOST}/participant/delete`
+    const response = await axios.put(
+      url,
+      { id: idjugador },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    const result = response.data
+    return result
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function eliminarEquipo(token, idequipo) {
+  try {
+    const url = `${API_HOST}/team/delete`
+    const response = await axios.put(
+      url,
+      { id: idequipo },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    const result = response.data
+    return result
+  } catch (error) {
+    throw error
+  }
+}

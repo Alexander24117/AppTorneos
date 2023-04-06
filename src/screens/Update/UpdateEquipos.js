@@ -235,6 +235,7 @@ export default function UpdateEquipos(props) {
 const styles = StyleSheet.create({
   container: {
     marginTop: 40,
+    marginBottom: 30,
     backgroundColor: "#f1f1f1",
     alignItems: "center",
     justifyContent: "center",

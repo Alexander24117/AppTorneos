@@ -93,12 +93,14 @@ export default function CreateEquipos(props) {
   return (
     <SafeAreaView>
       <ScrollView style={styles.scroll}>
-        <View style={styles.container}>
-          <Image
+      <View  style={styles.container}  >
+      <View style={styles.bg} />
+      <Image
             style={{ width: 350, height: 300, marginBottom: 10 }}
             source={require("../../assets/logojugadores.png")}
           />
-
+      </View>
+      <View  style={styles.container}  >
           <Text style={styles.titulo}>Digite los datos</Text>
 
           <TextInput
@@ -174,6 +176,7 @@ export default function CreateEquipos(props) {
 const styles = StyleSheet.create({
   container: {
     marginTop: 40,
+    marginBottom: 30,
     backgroundColor: "#f1f1f1",
     alignItems: "center",
     justifyContent: "center",
@@ -221,5 +224,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  bg: {
+    width: "100%",
+    height: 400,
+    position: "absolute",
+    borderBottomEndRadius: 300,
+    borderBottomLeftRadius: 300,
+    backgroundColor: "#003d7c",
+    transform: [{ scaleX: 2 }],
   },
 });

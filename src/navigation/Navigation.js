@@ -27,7 +27,7 @@ export default function Navigation() {
             <TouchableWithoutFeedback
               onPress={() => navigation.navigate("CreateEquipo")}
             >
-              <Ionicons name="add" size={40} color="#1d5bad" />
+              <Ionicons name="add" size={40} color="#1d5bad"  style={{ marginRight : 10}}/>
             </TouchableWithoutFeedback>
           ),
         }}
@@ -40,6 +40,13 @@ export default function Navigation() {
           tabBarIcon: () => (
             <SimpleLineIcons name="trophy" size={25} color="#1d5bad" />
           ),
+          headerRight: () => (
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate("CreateJugador")}
+            >
+              <Ionicons name="add" size={40} color="#1d5bad" style={{ marginRight : 10}} />
+            </TouchableWithoutFeedback>
+          ),
         }}
       />
       <Tab.Screen
@@ -49,6 +56,13 @@ export default function Navigation() {
           tabBarLabel: "Jugadores",
           tabBarIcon: () => (
             <MaterialCommunityIcons name="run-fast" size={25} color="#1d5bad" />
+          ),
+          headerRight: () => (
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate("CreateJugador")}
+            >
+              <Ionicons name="add" size={40} color="#1d5bad" style={{ marginRight : 10}}/>
+            </TouchableWithoutFeedback>
           ),
         }}
       />

@@ -207,7 +207,7 @@ export async function traerEquiposs(token) {
 }
 export async function traerDeportess(token) {
   try {
-    const url = `${API_HOST}/team/read/all`
+    const url = `${API_HOST}/sport/read/all`
     const response = await getData(url, token)
     const result = response
     return result
@@ -328,24 +328,61 @@ export async function traerTorneos(token) {
   }
 }
 
+export async function ActuJugador(token, equipo) {
+  try {
+    const url = `${API_HOST}/participant/update`
+    const response = await axios.put(url, equipo, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    const result = response
+    return result
+  } catch (error) {
+    throw error
+  }
+}
 
-export async function ActuJugador(token, equipo){
-  try{
-    const url = `${API_HOST}/participant/update`;
+export async function traerTablaPuntosTorneo(token, idTorneo) {
+  try {
+    const url = `${API_HOST}/tournaments/read/table/team/points`
     const response = await axios.put(
       url,
-      equipo,
+      { tournament_id: idTorneo },
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
-    );
-    const result = response;
-    return result;
+    )
+    const result = response.data
+    return result
+  } catch (error) {
+    throw error
   }
-  catch(error){
-    throw error;
+}
+
+export async function traerTorneoById(token, idTorneo) {
+  try {
+    const url = `${API_HOST}/tournaments/read/id`
+    const response = await axios.get(url, {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { id: idTorneo },
+    })
+    const result = response
+    return result
+  } catch (error) {
+    throw error
   }
-  
+}
+
+export async function traerTipoTorneo(token) {
+  try {
+    const url = `${API_HOST}/tournament_type/read/all`
+    const response = await getData(url, token)
+    const result = response
+    return result
+  } catch (error) {
+    throw error
   }
+}

@@ -1,41 +1,49 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native"
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native"
 import React from "react"
 
-export default function MatchupTable({ data }) {
+export default function MatchupTable({ data, onMatchupPress }) {
   return (
     <ScrollView>
       <View style={styles.container}>
         {data.map((matchup, index) => (
-          <View key={index} style={styles.matchup}>
-            <View style={styles.matchupInfoContainer}>
-              <Text style={styles.matchupInfo}>Fecha: {matchup.date}</Text>
-              <Text style={styles.matchupInfo}>Hora: {matchup.hour}</Text>
-              <Text style={styles.matchupInfo}>Lugar: {matchup.place}</Text>
-            </View>
+          <TouchableOpacity key={index} onPress={() => onMatchupPress(matchup)}>
+            <View style={styles.matchup}>
+              <View style={styles.matchupInfoContainer}>
+                <Text style={styles.matchupInfo}>Fecha: {matchup.date}</Text>
+                <Text style={styles.matchupInfo}>Hora: {matchup.hour}</Text>
+                <Text style={styles.matchupInfo}>Lugar: {matchup.place}</Text>
+              </View>
 
-            {matchup.teams.map((team, idx) => (
-              <View key={idx} style={styles.team}>
-                <Text style={styles.teamInfo}>
-                  {team.name} - {team.institution_name}
+              {matchup.teams.map((team, idx) => (
+                <View key={idx} style={styles.team}>
+                  <Text style={styles.teamInfo}>
+                    {team.name} - {team.institution_name}
+                  </Text>
+                </View>
+              ))}
+
+              <View style={styles.matchupStatusContainer}>
+                <Text style={styles.matchupInfo}>Estado: {matchup.status}</Text>
+                <Text style={styles.matchupInfo}>
+                  Etapa: {matchup.stage_name}
                 </Text>
               </View>
-            ))}
 
-            <View style={styles.matchupStatusContainer}>
-              <Text style={styles.matchupInfo}>Estado: {matchup.status}</Text>
-              <Text style={styles.matchupInfo}>
-                Etapa: {matchup.stage_name}
-              </Text>
+              {matchup.teams.map((team, idx) => (
+                <View key={idx} style={styles.team}>
+                  {team.is_winner && (
+                    <Text style={styles.winnerInfo}>Ganador: {team.name}</Text>
+                  )}
+                </View>
+              ))}
             </View>
-
-            {matchup.teams.map((team, idx) => (
-              <View key={idx} style={styles.team}>
-                {team.is_winner && (
-                  <Text style={styles.winnerInfo}>Ganador: {team.name}</Text>
-                )}
-              </View>
-            ))}
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
     </ScrollView>

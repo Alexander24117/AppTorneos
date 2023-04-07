@@ -5,6 +5,8 @@ import {
   StyleSheet,
   ActivityIndicator,
   ScrollView,
+  TouchableOpacity,
+  FlatList,
 } from "react-native"
 import React, { useState, useEffect } from "react"
 import {
@@ -19,6 +21,7 @@ import Ionicons from "react-native-vector-icons/Ionicons"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 import TablaPuntos from "./TablaPuntos"
 import MatchupTable from "./MatchupTable"
+import MatchupDetails from "./MatchupDetails"
 const jwtManager = new JWTManager()
 
 export default function Torneo(props) {
@@ -26,21 +29,26 @@ export default function Torneo(props) {
     navigation,
     route: { params },
   } = props
+  const [jwt, setJwt] = useState(null)
   const [torneo, setTorneo] = useState(null)
   const [deportes, setDeportes] = useState(null)
   const [tipoTorneo, setTipoTorneo] = useState(null)
   const [tableData, setTableData] = useState(null)
   const [enfrentamientos, setEnfrentamientos] = useState(null)
+  const [selectedMatchup, setSelectedMatchup] = useState(null)
+  const [contador, setContador] = useState(0)
   useEffect(() => {
     ;(async () => {
       try {
         const jwt = await jwtManager.getToken()
+        setJwt(jwt)
         if (!jwt) {
           return
         }
 
         const table = await traerTablaPuntosTorneo(jwt, params.id)
         setTableData(table.data.table)
+        setContador(contador + 1)
         const enfrentamientosResponse = await traerEnfrentamientosPorTorneo(
           jwt,
           params.id
@@ -50,7 +58,7 @@ export default function Torneo(props) {
         console.error(error)
       }
     })()
-  }, [params])
+  }, [])
   useEffect(() => {
     ;(async () => {
       try {
@@ -103,6 +111,7 @@ export default function Torneo(props) {
   }, [torneo])
 
   if (!torneo || !deportes || !tipoTorneo || !enfrentamientos) {
+    console.log(contador, "contador")
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#1d5bad" />
@@ -113,6 +122,9 @@ export default function Torneo(props) {
   const tipoDeTorneo = tipoTorneo.find(
     (d) => d.id === torneo.fk_types_tournament_id
   )
+  const handleMatchupPress = (matchup) => {
+    navigation.navigate("MatchupDetails", { jwt: jwt, matchup: matchup })
+  }
   return (
     <>
       <View style={styles.bg} />
@@ -130,7 +142,10 @@ export default function Torneo(props) {
         {tipoDeTorneo.name === "CLASIFICATORIA" ? (
           <TablaPuntos data={tableData} />
         ) : null}
-        <MatchupTable data={enfrentamientos} />
+        <MatchupTable
+          data={enfrentamientos}
+          onMatchupPress={handleMatchupPress}
+        />
       </SafeAreaView>
     </>
   )

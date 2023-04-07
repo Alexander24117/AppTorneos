@@ -22,6 +22,7 @@ import Equipo from "./src/screens/Equipo"
 import Jugador from "./src/screens/Jugador"
 import Enfrentamientos from "./src/screens/Enfrentamientos"
 import Torneo from "./src/screens/Torneo"
+import MatchupDetails from "./src/screens/MatchupDetails"
 const Stack = createStackNavigator()
 
 export default function App() {
@@ -91,6 +92,11 @@ export default function App() {
         <Stack.Screen
           name="Torneo"
           component={Torneo}
+          options={{ headerShown: true }}
+        />
+        <Stack.Screen
+          name="MatchupDetails"
+          component={MatchupDetails}
           options={{ headerShown: true }}
         />
         {(props) => <HomeScreen {...props} extraData={someData} />}

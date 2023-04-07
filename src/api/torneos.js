@@ -454,3 +454,33 @@ export async function traerEnfrentamientosPorTorneo(toker, idTorneo) {
     throw error
   }
 }
+
+export async function actualizarEnfrentamiento(token, enfrentamiento) {
+  try {
+    const url = `${API_HOST}/matchup/update`
+    const response = await axios.put(url, enfrentamiento, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    const result = response
+    return result
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function finalizarEnfrentamiento(token, enfrentamiento) {
+  try {
+    const url = `${API_HOST}/matchup/finalize`
+    const response = await axios.put(url, enfrentamiento, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    const result = response
+    return result
+  } catch (error) {
+    throw error
+  }
+}

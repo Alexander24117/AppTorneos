@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Pressable,
   Image,
+  TouchableOpacity
 } from "react-native"
 import React, { useState, useEffect } from "react"
 import { ScrollView } from "react-native-gesture-handler"
@@ -13,6 +14,7 @@ import { SelectList } from "react-native-dropdown-select-list"
 import { departamentos, ciudades, traerJugadorById, ActuJugador } from "../../api/torneos"
 import JWTManager from "../../api/JWTManager"
 import * as ImagePicker from "expo-image-picker";
+import DateTimePicker from "@react-native-community/datetimepicker"
 
 const jwtManager = new JWTManager()
 
@@ -29,6 +31,10 @@ export default function UpdateJugador(props) {
   const [selected, setSelected] = React.useState("")
   const [selectedCiudad, setselectedCiudad] = React.useState("")
   const [image, setImage] = useState(null);
+
+  const [date, setDate] = useState(new Date())
+  const [showDatePicker, setShowDatePicker] = useState(false)
+
   let [jugador, setJugador] = useState({});
   useEffect(() => {
     const fetchData = async () => {
@@ -143,7 +149,15 @@ export default function UpdateJugador(props) {
      console.log(jugador);
  }
 
- 
+ const onDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date
+    setShowDatePicker(Platform.OS === "ios")
+    setDate(currentDate)
+
+
+    setJugador({ ...jugador, date_birth: currentDate });
+  }
+
   const data = infoCiudad
   return (
     <SafeAreaView>
@@ -189,12 +203,27 @@ export default function UpdateJugador(props) {
             placeholder="Email"
           />
 
-          <TextInput
+          {/* <TextInput
             style={styles.textInput}
             value={jugador.date_birth}
             onChangeText={(text) => onChangeDateBirth("date_birth", text)}
             placeholder="Fecha Nacimiento"
-          />
+          /> */}
+          <View style={styles.infoContainer}>
+            <Text style={styles.label}>Fecha de nacimiento:</Text>
+            <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+              <Text style={styles.textInputDate}>{date.toLocaleDateString()}</Text>
+            </TouchableOpacity>
+            {showDatePicker && (
+              <DateTimePicker
+                value={date}
+                mode="date"
+                display="default"
+                placeholderText="AAA"
+                onChange={onDateChange}
+              />
+            )}
+          </View>
 
           <View style={{ paddingVertical: 20, paddingBottom: -10, width: 320 }}>
             <SelectList
@@ -251,6 +280,7 @@ export default function UpdateJugador(props) {
 const styles = StyleSheet.create({
   container: {
     marginTop: 40,
+    marginBottom:20,
     backgroundColor: "#f1f1f1",
     alignItems: "center",
     justifyContent: "center",
@@ -301,5 +331,27 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 300,
     backgroundColor: "#003d7c",
     transform: [{ scaleX: 2 }],
+  },
+  textInputDate: {
+    borderWidth: 1,
+    borderColor: "blue",
+    padding: 10,
+    paddingStart: 25,
+    width: 110,
+    height: 50,
+    marginTop: 20,
+    borderRadius: 25,
+    backgroundColor: "#fff",
+  },
+  infoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  label: {
+    marginTop:15,
+    fontSize: 15,
+    width: 100,
+    color:"gray"
   },
 })

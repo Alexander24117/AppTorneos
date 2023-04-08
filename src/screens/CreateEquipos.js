@@ -9,14 +9,14 @@ import {
   SafeAreaView,
   Pressable,
   Image,
-  Alert,
-  Linking,
+  TouchableOpacity
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import * as SecureStore from "expo-secure-store";
 import { crearEquipo, traerInstituciones } from "../api/torneos";
 import JWTManager from "../api/JWTManager";
 import * as ImagePicker from "expo-image-picker";
+import DateTimePicker from "@react-native-community/datetimepicker"
 
 const jwtManager = new JWTManager();
 export default function CreateEquipos(props) {
@@ -29,6 +29,16 @@ export default function CreateEquipos(props) {
   const [selectedInsti, setSelectedInsti] = React.useState("");
   const [infoInstitution, setDataInsti] = useState([]);
   const [image, setImage] = useState(null);
+
+  const [date, setDate] = useState(new Date())
+  const [showDatePicker, setShowDatePicker] = useState(false)
+
+  const onDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date
+    setShowDatePicker(Platform.OS === "ios")
+    setDate(currentDate)
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       const jwt = await jwtManager.getToken();
@@ -90,6 +100,7 @@ export default function CreateEquipos(props) {
     },
   });
   values.fk_institutions_id = selectedInsti;
+  values.date_birth = date
   return (
     <SafeAreaView>
       <ScrollView style={styles.scroll}>
@@ -101,7 +112,7 @@ export default function CreateEquipos(props) {
           />
       </View>
       <View  style={styles.container}  >
-          <Text style={styles.titulo}>Digite los datos</Text>
+          <Text style={styles.titulo}>Digite los datos del equipo</Text>
 
           <TextInput
             style={styles.textInput}
@@ -130,12 +141,28 @@ export default function CreateEquipos(props) {
             onChangeText={(text) => setFieldValue("email", text)}
             placeholder="Email"
           />
-          <TextInput
+          {/* <TextInput
             style={styles.textInput}
             value={values.date_birth}
             onChangeText={(text) => setFieldValue("date_birth", text)}
             placeholder="Fecha de nacimiento"
-          />
+          /> */}
+
+          <View style={styles.infoContainer}>
+            <Text style={styles.label}>Fecha de Creacion:</Text>
+            <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+              <Text style={styles.textInputDate}>{date.toLocaleDateString()}</Text>
+            </TouchableOpacity>
+            {showDatePicker && (
+              <DateTimePicker
+                value={date}
+                mode="date"
+                display="default"
+                placeholderText="AAA"
+                onChange={onDateChange}
+              />
+            )}
+          </View>
 
           <View style={{ paddingVertical: 20, paddingBottom: -10, width: 320 }}>
             <SelectList
@@ -215,6 +242,7 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 20,
+    fontWeight: "bold",
   },
   scroll: {
     marginHorizontal: 0.1,
@@ -233,5 +261,27 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 300,
     backgroundColor: "#003d7c",
     transform: [{ scaleX: 2 }],
+  },
+   textInputDate: {
+    borderWidth: 1,
+    borderColor: "blue",
+    padding: 10,
+    paddingStart: 25,
+    width: 110,
+    height: 50,
+    marginTop: 20,
+    borderRadius: 25,
+    backgroundColor: "#fff",
+  },
+  infoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  label: {
+    marginTop:15,
+    fontSize: 15,
+    width: 100,
+    color:"gray"
   },
 });

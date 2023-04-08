@@ -6,13 +6,11 @@ import {
   SafeAreaView,
   Pressable,
   Image,
-  Button,
+  TouchableOpacity
 } from "react-native"
 import React, { useState, useEffect } from "react"
 import {
-  saveJugador,
   crearParticipantes,
-  traerEquiposs,
   traerEquipoByInsti,
   departamentos,
   ciudadesPorDepartment,
@@ -24,6 +22,7 @@ import { SelectList } from "react-native-dropdown-select-list"
 import JWTManager from "../api/JWTManager"
 import * as SecureStore from "expo-secure-store"
 import * as ImagePicker from "expo-image-picker"
+import DateTimePicker from "@react-native-community/datetimepicker"
 
 const jwtManager = new JWTManager()
 
@@ -45,6 +44,9 @@ export default function CreateJugador(props) {
 
   const [infoInstitution, setDataInsti] = useState([])
   const [selectedInsti, setSelectedInsti] = React.useState("")
+
+  const [date, setDate] = useState(new Date())
+  const [showDatePicker, setShowDatePicker] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -150,6 +152,12 @@ export default function CreateJugador(props) {
     }
   }
 
+  const onDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date
+    setShowDatePicker(Platform.OS === "ios")
+    setDate(currentDate)
+  }
+
   const { values, isSubmitting, setFieldValue, handleSubmit } = useFormik({
     initialValues: {
       names: "",
@@ -172,6 +180,7 @@ export default function CreateJugador(props) {
   values.fk_departments_id = selectedDeparment
   values.fk_cities_id = selectedCiudad
   values.team_id = selectedEquipo
+  values.date_birth = date
   const data = infoCiudad
   return (
     <SafeAreaView>
@@ -184,7 +193,7 @@ export default function CreateJugador(props) {
           />
         </View>
         <View style={styles.container}>
-          <Text style={styles.titulo}>Digite los datos</Text>
+          <Text style={styles.titulo}>Digite los datos del participante</Text>
           <TextInput
             style={styles.textInput}
             value={values.names}
@@ -216,12 +225,28 @@ export default function CreateJugador(props) {
             placeholder="Email"
           />
 
-          <TextInput
+          {/* <TextInput
             style={styles.textInput}
             value={values.date_birth}
             onChangeText={(text) => setFieldValue("date_birth", text)}
             placeholder="Fecha Nacimiento"
-          />
+          /> */}
+
+          <View style={styles.infoContainer}>
+            <Text style={styles.label}>Fecha de nacimiento:</Text>
+            <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+              <Text style={styles.textInputDate}>{date.toLocaleDateString()}</Text>
+            </TouchableOpacity>
+            {showDatePicker && (
+              <DateTimePicker
+                value={date}
+                mode="date"
+                display="default"
+                placeholderText="AAA"
+                onChange={onDateChange}
+              />
+            )}
+          </View>
 
           <View style={{ paddingVertical: 20, paddingBottom: -10, width: 320 }}>
             <SelectList
@@ -358,6 +383,7 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontSize: 20,
+    fontWeight: "bold",
   },
   scroll: {
     marginHorizontal: 0.1,
@@ -378,5 +404,27 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 300,
     backgroundColor: "#003d7c",
     transform: [{ scaleX: 2 }],
+  },
+  textInputDate: {
+    borderWidth: 1,
+    borderColor: "blue",
+    padding: 10,
+    paddingStart: 25,
+    width: 110,
+    height: 50,
+    marginTop: 20,
+    borderRadius: 25,
+    backgroundColor: "#fff",
+  },
+  infoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  label: {
+    marginTop:15,
+    fontSize: 15,
+    width: 100,
+    color:"gray"
   },
 })

@@ -88,7 +88,10 @@ export default function Equipo(props) {
       <SafeAreaView style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.name}>{equipo.name}</Text>
+          <View style={styles.infoCel}>
+          <Text style={styles.order}>Celular: </Text>
           <Text style={styles.order}>{equipo.cel_phone}</Text>
+          </View>
         </View>
         <Text style={styles.name}>{"Email:" + equipo.email}</Text>
         <Text style={styles.name}>Partidos:</Text>
@@ -153,10 +156,9 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   header: {
-    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingTop: 40,
+    paddingTop: 15,
   },
   body: {
     flexDirection: "row",
@@ -179,4 +181,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     width: 100,
   },
+  infoCel:{
+    flexDirection: "row"
+  }
 })

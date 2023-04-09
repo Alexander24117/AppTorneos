@@ -107,8 +107,8 @@ export default function CreateEquipos(props) {
       <View  style={styles.container}  >
       <View style={styles.bg} />
       <Image
-            style={{ width: 350, height: 300, marginBottom: 10 }}
-            source={require("../../assets/logojugadores.png")}
+            style={{ width: 350, height: 300, marginTop:10 }}
+            source={require("../../assets/equipo.png")}
           />
       </View>
       <View  style={styles.container}  >

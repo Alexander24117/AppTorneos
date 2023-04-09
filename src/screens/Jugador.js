@@ -91,13 +91,28 @@ export default function Jugador(props) {
   return (
     <>
       <View style={styles.bg} />
-      <SafeAreaView style={styles.content}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.content}>
-          <Text style={styles.name}> {jugador.surnames}</Text>
+          <View style={styles.infocontainer}>
+          <Text style={styles.name}>Nombre:</Text>  
           <Text style={styles.name}> {jugador.names}</Text>
+          </View>
+          <View style={styles.infocontainer}>
+          <Text style={styles.name}>Apellido:</Text>  
+          <Text style={styles.name}> {jugador.surnames}</Text> 
+          </View>
+          <View style={styles.infocontainer}>
+          <Text style={styles.name}>Email:</Text>  
           <Text style={styles.name}> {jugador.email}</Text>
+          </View>
+          <View style={styles.infocontainer}>
+          <Text style={styles.name}>Celular:</Text>  
           <Text style={styles.name}> {jugador.cel_phone}</Text>
+          </View>
+          <View style={styles.infocontainer}>
+          <Text style={styles.name}>identificacion:</Text>  
           <Text style={styles.name}> {jugador.identification}</Text>
+          </View>
         </View>
 
         <Modal
@@ -165,5 +180,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingRight: 10,
     width: 100, 
+  },
+  infocontainer:{
+    flexDirection: "row"
+  },
+  container: {
+    marginTop: 40,
+    marginBottom: 30,
+    alignItems: "center",
+    justifyContent: "center",
   },
 })

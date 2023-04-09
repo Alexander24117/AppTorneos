@@ -160,7 +160,7 @@ export default function UpdateEquipos(props) {
       <View style={styles.bg} />
       <Image
             style={{ width: 350, height: 300, marginBottom: 10 }}
-            source={require("../../../assets/logojugadores.png")}
+            source={require("../../../assets/equipo.png")}
           />
       </View>
     <View  style={styles.container}  >

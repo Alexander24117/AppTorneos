@@ -104,7 +104,7 @@ export default function Torneo(props) {
         <TouchableWithoutFeedback
           onPress={() => navigation.navigate("UpdateTorneo", { id: params.id })}
         >
-          <Ionicons name="ios-pencil-outline" size={38} color="#1d5bad" />
+          <Ionicons name="ios-pencil-outline" size={38} style= {{color:"#1d5bad", marginRight:10 }} />
         </TouchableWithoutFeedback>
       ),
     })
@@ -170,7 +170,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   header: {
-    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingTop: 40,

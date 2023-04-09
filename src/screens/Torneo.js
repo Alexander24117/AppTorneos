@@ -197,4 +197,21 @@ const styles = StyleSheet.create({
   spacer: {
     height: "20%", // Ajusta este valor según el espacio deseado
   },
+  matchup: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    marginBottom: 10,
+  },
+  team: {
+    alignItems: "center",
+  },
+  teamLogo: {
+    width: 50,
+    height: 50,
+  },
+  vsText: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
 })

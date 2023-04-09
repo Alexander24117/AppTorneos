@@ -52,7 +52,7 @@ export default function App() {
         <Stack.Screen
           name="CreateInstitucion"
           component={CreateInstitucion}
-          options={{ headerShown: false }}
+          options={{ headerShown: true }}
         />
         <Stack.Screen
           name="CreateEquipo"
@@ -62,7 +62,7 @@ export default function App() {
         <Stack.Screen
           name="CreateTorneos"
           component={CreateTorneos}
-          options={{ headerShown: false }}
+          options={{ headerShown: true }}
         />
         <Stack.Screen
           name="UpdateJugador"

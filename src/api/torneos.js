@@ -1,5 +1,4 @@
 import { API_HOST } from "../utils/constans"
-import RNSecureKeyStore, { ACCESSIBLE } from "react-native-secure-key-store"
 import axios from "axios"
 
 let token = ""
@@ -199,6 +198,28 @@ export async function traerEquiposs(token) {
   try {
     const url = `${API_HOST}/team/read/all`
     const response = await getData(url, token)
+    const result = response
+    return result
+  } catch (error) {
+    throw error
+  }
+}
+export async function traerEquiposPorInstitucion(
+  token,
+  idInstitucion,
+  teams_id
+) {
+  try {
+    const url = `${API_HOST}/institution/read/without/teams`
+    const response = await axios.put(
+      url,
+      { institution_id: idInstitucion, teams_id_except: teams_id },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
     const result = response
     return result
   } catch (error) {
@@ -478,6 +499,59 @@ export async function finalizarEnfrentamiento(token, enfrentamiento) {
         Authorization: `Bearer ${token}`,
       },
     })
+    const result = response
+    return result
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function calcularPartidos(token, tipoTorneo, idEquipos) {
+  try {
+    const url = `${API_HOST}/calculate/tournament/matchups`
+    const response = await axios.put(
+      url,
+      { type_id: tipoTorneo, teams_id: idEquipos },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    const result = response
+    return result
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function crearTorneo(token, torneo) {
+  try {
+    const url = `${API_HOST}/tournaments/create`
+    const response = await axios.post(url, torneo, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    const result = response
+    return result
+  } catch (error) {
+    throw error
+  }
+}
+
+export async function calcularEtapaClasificatoria(token, numEquipos) {
+  try {
+    const url = `${API_HOST}/calculate/tournament/stage`
+    const response = await axios.put(
+      url,
+      { num_teams: numEquipos },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
     const result = response
     return result
   } catch (error) {

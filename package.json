@@ -43,6 +43,7 @@
     "react-native-svg": "13.4.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "^0.18.10",
+    "react-navigation-header-buttons": "^10.0.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

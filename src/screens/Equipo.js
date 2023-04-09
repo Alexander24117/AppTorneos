@@ -62,7 +62,7 @@ export default function Equipo(props) {
         <View style={styles.headerRightContainer}>
           <TouchableWithoutFeedback
             onPress={() =>
-              navigation.navigate("UpdateEquipo", { id: params.id })
+              navigation.navigate("UpdateEquipos", { id: params.id })
             }
           >
             <Ionicons name="ios-pencil-outline" size={38} color="#1d5bad" />

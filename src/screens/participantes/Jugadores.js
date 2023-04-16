@@ -1,14 +1,7 @@
-import {
-  SafeAreaView,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  View,
-  RefreshControl,
-} from "react-native"
+import { SafeAreaView, StyleSheet, ActivityIndicator, View } from "react-native"
 import React, { useEffect } from "react"
-import { traerJugadores } from "../api/torneos"
-import JugadoresList from "../components/JugadoresList"
+import { traerJugadores } from "../../api/torneos"
+import JugadoresList from "../../components/lists/JugadoresList"
 import * as SecureStore from "expo-secure-store"
 
 export default function Jugadores({ navigation }) {

@@ -7,13 +7,13 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
-  Image
+  Image,
 } from "react-native"
 import DateTimePicker from "@react-native-community/datetimepicker"
 import {
   actualizarEnfrentamiento,
   finalizarEnfrentamiento,
-} from "../api/torneos"
+} from "../../api/torneos"
 
 export default function MatchupDetails({ route, navigation }) {
   const { jwt, matchup } = route.params
@@ -31,10 +31,10 @@ export default function MatchupDetails({ route, navigation }) {
   )
 
   const formatTime = (time) => {
-    const hours = time.getHours().toString().padStart(2, "0");
-    const minutes = time.getMinutes().toString().padStart(2, "0");
-    return `${hours}:${minutes}`;
-  };
+    const hours = time.getHours().toString().padStart(2, "0")
+    const minutes = time.getMinutes().toString().padStart(2, "0")
+    return `${hours}:${minutes}`
+  }
 
   const updateMatchup = async () => {
     const updatedData = {
@@ -98,13 +98,13 @@ export default function MatchupDetails({ route, navigation }) {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View  style={styles.container}  >
-      <View style={styles.bg} />
-      <Image
+        <View style={styles.container}>
+          <View style={styles.bg} />
+          <Image
             style={{ width: 350, height: 300, marginBottom: 10 }}
-            source={require("../../assets/logojugadores.png")}
+            source={require("../../../assets/logojugadores.png")}
           />
-      </View>
+        </View>
         <View style={styles.container}>
           <Text style={styles.header}>Detalles del enfrentamiento</Text>
           <View style={styles.infoContainer}>
@@ -119,7 +119,9 @@ export default function MatchupDetails({ route, navigation }) {
           <View style={styles.infoContainer}>
             <Text style={styles.label}>Fecha:</Text>
             <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-              <Text style={styles.textInputDate}>{date.toLocaleDateString()}</Text>
+              <Text style={styles.textInputDate}>
+                {date.toLocaleDateString()}
+              </Text>
             </TouchableOpacity>
             {showDatePicker && (
               <DateTimePicker
@@ -176,15 +178,13 @@ export default function MatchupDetails({ route, navigation }) {
                     })
                   }
                 />
-                
               </View>
               <Text style={styles.disclaimer}>
-                  * Si aplica, ingrese los penales.
-                </Text>
+                * Si aplica, ingrese los penales.
+              </Text>
             </View>
           ))}
 
-          
           <TouchableOpacity style={styles.button} onPress={updateMatchup}>
             <Text style={styles.buttonText}>Actualizar</Text>
           </TouchableOpacity>
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
-    alignContent: "center"
+    alignContent: "center",
   },
   button: {
     backgroundColor: "#0069D9",
@@ -305,12 +305,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 25,
     backgroundColor: "#fff",
-    marginLeft: 40 
+    marginLeft: 40,
   },
   button: {
     marginTop: 20,
     marginBottom: 20,
-    marginLeft:40,
+    marginLeft: 40,
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 12,

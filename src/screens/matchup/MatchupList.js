@@ -1,6 +1,6 @@
-import { View, Text, ScrollView, StyleSheet } from "react-native"
+import { View, ScrollView, StyleSheet } from "react-native"
 import React from "react"
-import Matchup from "./Matchup"
+import Matchup from "../matchup/Matchup"
 export default function MatchupList({ matchups }) {
   return (
     <ScrollView style={styles.container}>

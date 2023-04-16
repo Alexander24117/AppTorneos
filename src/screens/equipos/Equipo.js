@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
 } from "react-native"
 import React, { useState, useEffect } from "react"
-import { traerEquipoById, eliminarEquipo } from "../api/torneos"
-import JWTManager from "../api/JWTManager"
+import { traerEquipoById, eliminarEquipo } from "../../api/torneos"
+import JWTManager from "../../api/JWTManager"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 import Modal from "react-native-modal"
@@ -89,8 +89,8 @@ export default function Equipo(props) {
         <View style={styles.header}>
           <Text style={styles.name}>{equipo.name}</Text>
           <View style={styles.infoCel}>
-          <Text style={styles.order}>Celular: </Text>
-          <Text style={styles.order}>{equipo.cel_phone}</Text>
+            <Text style={styles.order}>Celular: </Text>
+            <Text style={styles.order}>{equipo.cel_phone}</Text>
           </View>
         </View>
         <Text style={styles.name}>{"Email:" + equipo.email}</Text>
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     width: 100,
   },
-  infoCel:{
-    flexDirection: "row"
-  }
+  infoCel: {
+    flexDirection: "row",
+  },
 })

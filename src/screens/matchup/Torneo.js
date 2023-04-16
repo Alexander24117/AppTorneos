@@ -4,9 +4,6 @@ import {
   SafeAreaView,
   StyleSheet,
   ActivityIndicator,
-  ScrollView,
-  TouchableOpacity,
-  FlatList,
 } from "react-native"
 import React, { useState, useEffect } from "react"
 import {
@@ -15,13 +12,12 @@ import {
   traerTipoTorneo,
   traerTablaPuntosTorneo,
   traerEnfrentamientosPorTorneo,
-} from "../api/torneos"
-import JWTManager from "../api/JWTManager"
+} from "../../api/torneos"
+import JWTManager from "../../api/JWTManager"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
-import TablaPuntos from "./TablaPuntos"
-import MatchupTable from "./MatchupTable"
-import MatchupDetails from "./MatchupDetails"
+import TablaPuntos from "../matchup/TablaPuntos"
+import MatchupTable from "../matchup/MatchupTable"
 const jwtManager = new JWTManager()
 
 export default function Torneo(props) {
@@ -104,7 +100,11 @@ export default function Torneo(props) {
         <TouchableWithoutFeedback
           onPress={() => navigation.navigate("UpdateTorneo", { id: params.id })}
         >
-          <Ionicons name="ios-pencil-outline" size={38} style= {{color:"#1d5bad", marginRight:10 }} />
+          <Ionicons
+            name="ios-pencil-outline"
+            size={38}
+            style={{ color: "#1d5bad", marginRight: 10 }}
+          />
         </TouchableWithoutFeedback>
       ),
     })

@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   Pressable,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native"
 import React, { useState, useEffect } from "react"
 import {
@@ -15,11 +15,11 @@ import {
   departamentos,
   ciudadesPorDepartment,
   traerInstituciones,
-} from "../api/torneos"
+} from "../../api/torneos"
 import { useFormik } from "formik"
 import { ScrollView } from "react-native-gesture-handler"
 import { SelectList } from "react-native-dropdown-select-list"
-import JWTManager from "../api/JWTManager"
+import JWTManager from "../../api/JWTManager"
 import * as SecureStore from "expo-secure-store"
 import * as ImagePicker from "expo-image-picker"
 import DateTimePicker from "@react-native-community/datetimepicker"
@@ -189,7 +189,7 @@ export default function CreateJugador(props) {
           <View style={styles.bg} />
           <Image
             style={{ width: 350, height: 300, marginBottom: 10 }}
-            source={require("../../assets/logojugadores.png")}
+            source={require("../../../assets/logojugadores.png")}
           />
         </View>
         <View style={styles.container}>
@@ -235,7 +235,9 @@ export default function CreateJugador(props) {
           <View style={styles.infoContainer}>
             <Text style={styles.label}>Fecha de nacimiento:</Text>
             <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-              <Text style={styles.textInputDate}>{date.toLocaleDateString()}</Text>
+              <Text style={styles.textInputDate}>
+                {date.toLocaleDateString()}
+              </Text>
             </TouchableOpacity>
             {showDatePicker && (
               <DateTimePicker
@@ -422,9 +424,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   label: {
-    marginTop:15,
+    marginTop: 15,
     fontSize: 15,
     width: 100,
-    color:"gray"
+    color: "gray",
   },
 })

@@ -1,16 +1,16 @@
 import { View, Text, FlatList, StyleSheet, RefreshControl } from "react-native"
 import React from "react"
-import EquipoCard from "./EquipoCard"
+import JugadorCard from "./../cards/JugadorCard"
 
-export default function EquiposList(props) {
-  const { equipos } = props
+export default function JugadoresList(props) {
+  const { jugadores } = props
   return (
     <FlatList
-      data={equipos}
+      data={jugadores}
       numColumns={2}
       showsVerticalScrollIndicator={false}
-      keyExtractor={(equipo) => equipo.id.toString()}
-      renderItem={(equipo) => <EquipoCard equipo={equipo} />}
+      keyExtractor={(jugador) => jugador.id.toString()}
+      renderItem={(jugador) => <JugadorCard jugador={jugador} />}
       refreshControl={
         <RefreshControl
           refreshing={props.refreshing}
@@ -21,7 +21,6 @@ export default function EquiposList(props) {
     />
   )
 }
-
 const styles = StyleSheet.create({
   flatListContentContainer: {
     paddingHorizontal: 5,

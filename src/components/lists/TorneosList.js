@@ -1,6 +1,6 @@
 import { View, Text, FlatList, StyleSheet, RefreshControl } from "react-native"
 import React from "react"
-import TorneoCard from "./TorneoCard"
+import TorneoCard from "./../cards/TorneoCard"
 
 export default function TorneosList(props) {
   const { torneos } = props

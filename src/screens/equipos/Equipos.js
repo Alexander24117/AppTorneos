@@ -5,11 +5,9 @@ import {
   View,
   StyleSheet,
   ActivityIndicator,
-  ScrollView,
-  RefreshControl,
 } from "react-native"
-import EquiposList from "../components/EquiposList"
-import { traerEquiposs } from "../api/torneos"
+import EquiposList from "../../components/lists/EquiposList"
+import { traerEquiposs } from "../../api/torneos"
 import * as SecureStore from "expo-secure-store"
 
 export default function Equipos({ navigation }) {

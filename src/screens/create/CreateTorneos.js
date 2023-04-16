@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
-  Image
+  Image,
 } from "react-native"
 import {
   traerDeportess,
@@ -15,14 +15,11 @@ import {
   traerInstituciones,
   traerEquiposPorInstitucion,
   calcularPartidos,
-  crearTorneo,
-} from "../api/torneos"
+} from "../../api/torneos"
 import { SelectList } from "react-native-dropdown-select-list"
-import JWTManager from "../api/JWTManager"
+import JWTManager from "../../api/JWTManager"
 const jwtManager = new JWTManager()
-import MatchupList from "./MatchupList"
-import { TouchableWithoutFeedback } from "react-native-gesture-handler"
-import Ionicons from "react-native-vector-icons/Ionicons"
+import MatchupList from "../matchup/MatchupList"
 export default function CreateTorneos() {
   const [jwt, setJwt] = useState("")
   const [nombreTorneo, setNombreTorneo] = useState("")
@@ -39,10 +36,12 @@ export default function CreateTorneos() {
   const [matchups, setMatchups] = useState([])
   const [etapas, setEtapas] = useState([])
   const [etapaSeleccionada, setEtapaSeleccionada] = useState(null)
-  let tipoTorneoSeleccionado 
-  let numEquipos
+  const [numEquipos, setNumEquipos] = useState(0)
   useEffect(() => {
-    if (tipoTorneoSeleccionado === "clasificatoria") {
+    setNumEquipos(equiposAgregados.length)
+  }, [equiposAgregados])
+  useEffect(() => {
+    if (tipoTorneo === "clasificatoria") {
       const fetchEtapas = async () => {
         try {
           const response = await calcularEtapaClasificatoria(jwt, numEquipos)
@@ -57,7 +56,7 @@ export default function CreateTorneos() {
       }
       fetchEtapas()
     }
-  }, [tipoTorneoSeleccionado, jwt, numEquipos])
+  }, [tipoTorneo, jwt, numEquipos])
 
   const calcularEnfrentamientos = async () => {
     const response = await calcularPartidos(
@@ -184,158 +183,178 @@ export default function CreateTorneos() {
 
   return (
     <SafeAreaView>
-    <ScrollView style={styles.scroll}> 
-    <View style={styles.container2}>
-
-    <View style={styles.bg} />
+      <ScrollView style={styles.scroll}>
+        <View style={styles.container2}>
+          <View style={styles.bg} />
           <Image
             style={{ width: 350, height: 300, marginBottom: 10 }}
-            source={require("../../assets/imagenTorneo.png")}
+            source={require("../../../assets/imagenTorneo.png")}
           />
-    </View>
-    <View style={styles.container2}>
-      <Text style={styles.label}>Nombre del Torneo:</Text>
-      <TextInput
-        style={[styles.textInput, { borderColor: "blue" }]}
-        value={nombreTorneo}
-        onChangeText={(text) => setNombreTorneo(text)}
-        placeholder="Nombre del torneo"
-      />
+        </View>
+        <View style={styles.container2}>
+          <Text style={styles.label}>Nombre del Torneo:</Text>
+          <TextInput
+            style={[styles.textInput, { borderColor: "blue" }]}
+            value={nombreTorneo}
+            onChangeText={(text) => setNombreTorneo(text)}
+            placeholder="Nombre del torneo"
+          />
 
-      <Text style={styles.label}>Selecciona el deporte:</Text>
-      <View
-              style={{ paddingVertical: 20, paddingBottom: -10, width: 320 }}
-            >
-      <SelectList
-        setSelected={(val) => handleDeporteSeleccionado(val)}
-        data={deportesList}
-        save="id"
-        inputStyles={{
-          marginHorizontal: 40,
-          color: "blue",
-          backgroundColor: "#ffff",
-        }}
-        boxStyles={{ borderColor: "blue", backgroundColor: "#ffff" }}
-        search={{ placeholder: "Buscar deporte..." }}
-        placeholder="Deporte"
-        keyExtractor={(item) => item.id}
-      />
-      </View>
-      {deporteSeleccionado ? (
-        <>
-          <Text style={styles.label}>Selecciona el tipo de torneo:</Text>
-          <View
-              style={{ paddingVertical: 20, paddingBottom: -10, width: 320 }}
-            >
-          <SelectList
-            setSelected={(val) => setTipoTorneo(val)}
-            data={tiposTorneosList}
-            save="id"
-            inputStyles={{
-              marginHorizontal: 40,
-              color: "blue",
-              backgroundColor: "#ffff",
-            }}
-            boxStyles={{ borderColor: "blue", backgroundColor: "#ffff" }}
-            search={{ placeholder: "Buscar tipo de torneo..." }}
-            placeholder="Tipo de torneo"
-            keyExtractor={(item) => item.id}
-          />
-          <Text style={styles.disclaimer}>
-            TENER EN CUENTA, si es de tipo ELIMINATORIA solo se podrá crear el
-            torneo con 2, 4, 8, 16, 32 o 64 equipos.
-          </Text>
+          <Text style={styles.label}>Selecciona el deporte:</Text>
+          <View style={{ paddingVertical: 20, paddingBottom: -10, width: 320 }}>
+            <SelectList
+              setSelected={(val) => handleDeporteSeleccionado(val)}
+              data={deportesList}
+              save="id"
+              inputStyles={{
+                marginHorizontal: 40,
+                color: "blue",
+                backgroundColor: "#ffff",
+              }}
+              boxStyles={{ borderColor: "blue", backgroundColor: "#ffff" }}
+              search={{ placeholder: "Buscar deporte..." }}
+              placeholder="Deporte"
+              keyExtractor={(item) => item.id}
+            />
           </View>
-        </>
-      ) : null}
-      {tipoTorneo ? (
-        <>
-          <Text style={styles.label}>Selecciona la institución:</Text>
-          <View
-              style={{ paddingVertical: 20, paddingBottom: -10, width: 320 }}
-            >
-          <SelectList
-            setSelected={(val) => handleInstitucionSeleccionada(val)}
-            data={institucionesList}
-            save="id"
-            inputStyles={{
-              marginHorizontal: 40,
-              color: "blue",
-              backgroundColor: "#ffff",
-            }}
-            boxStyles={{ borderColor: "blue", backgroundColor: "#ffff" }}
-            search={{ placeholder: "Buscar institución..." }}
-            placeholder="Institución"
-            keyExtractor={(item) => item.id}
-          />
-          </View>
-
-          {institucionSeleccionada ? (
+          {deporteSeleccionado ? (
             <>
-              <Text style={styles.label}>Selecciona un equipo:</Text>
+              <Text style={styles.label}>Selecciona el tipo de torneo:</Text>
               <View
-              style={{ paddingVertical: 20, paddingBottom: -10, width: 320 }}
+                style={{ paddingVertical: 20, paddingBottom: -10, width: 320 }}
               >
-              <View style={{ flexDirection:"row", }}>
-              <SelectList
-                setSelected={(val) => setEquipoSeleccionado(val)}
-                data={equiposList}
-                save="id"
-                inputStyles={{
-                  marginHorizontal: 40,
-                  color: "blue",
-                  backgroundColor: "#ffff",
-                }}
-                boxStyles={{ borderColor: "blue", backgroundColor: "#ffff" }}
-                search={{ placeholder: "Buscar equipo..." }}
-                placeholder="Equipo"
-                keyExtractor={(item) => item.id}
-              />
-              <TouchableOpacity
-                style={styles.addButton}
-                onPress={agregarEquipo}
-              >
-                <Text style={styles.addButtonText}>Agregar</Text>
-              </TouchableOpacity>
-              </View>
+                <SelectList
+                  setSelected={(val) => setTipoTorneo(val)}
+                  data={tiposTorneosList}
+                  save="id"
+                  inputStyles={{
+                    marginHorizontal: 40,
+                    color: "blue",
+                    backgroundColor: "#ffff",
+                  }}
+                  boxStyles={{ borderColor: "blue", backgroundColor: "#ffff" }}
+                  search={{ placeholder: "Buscar tipo de torneo..." }}
+                  placeholder="Tipo de torneo"
+                  keyExtractor={(item) => item.id}
+                />
+                <Text style={styles.disclaimer}>
+                  TENER EN CUENTA, si es de tipo ELIMINATORIA solo se podrá
+                  crear el torneo con 2, 4, 8, 16, 32 o 64 equipos.
+                </Text>
               </View>
             </>
           ) : null}
-
-          {equiposAgregados.length > 0 && (
+          {tipoTorneo ? (
             <>
-              <Text style={styles.label}>Equipos agregados:</Text>
-              <View style={{width: "80%",}}>
-              <ScrollView style={styles.equiposAgregados}>
-                {equiposAgregados.map((equipo) => (
-                  <View style={styles.equipoItem} key={equipo.key}>
-                    <Text style={styles.equipoNombre}>{equipo.value}</Text>
-                    <TouchableOpacity
-                      style={styles.removeButton}
-                      onPress={() => quitarEquipo(equipo.key)}
-                    >
-                      <Text style={styles.removeButtonText}>Quitar</Text>
-                    </TouchableOpacity>
-                  </View>
-                ))}
-              </ScrollView>
-
+              <Text style={styles.label}>Selecciona la institución:</Text>
+              <View
+                style={{ paddingVertical: 20, paddingBottom: -10, width: 320 }}
+              >
+                <SelectList
+                  setSelected={(val) => handleInstitucionSeleccionada(val)}
+                  data={institucionesList}
+                  save="id"
+                  inputStyles={{
+                    marginHorizontal: 40,
+                    color: "blue",
+                    backgroundColor: "#ffff",
+                  }}
+                  boxStyles={{ borderColor: "blue", backgroundColor: "#ffff" }}
+                  search={{ placeholder: "Buscar institución..." }}
+                  placeholder="Institución"
+                  keyExtractor={(item) => item.id}
+                />
               </View>
+
+              {institucionSeleccionada ? (
+                <>
+                  <Text style={styles.label}>Selecciona un equipo:</Text>
+                  <View
+                    style={{
+                      paddingVertical: 20,
+                      paddingBottom: -10,
+                      width: 320,
+                    }}
+                  >
+                    <View style={{ flexDirection: "row" }}>
+                      <SelectList
+                        setSelected={(val) => setEquipoSeleccionado(val)}
+                        data={equiposList}
+                        save="id"
+                        inputStyles={{
+                          marginHorizontal: 40,
+                          color: "blue",
+                          backgroundColor: "#ffff",
+                        }}
+                        boxStyles={{
+                          borderColor: "blue",
+                          backgroundColor: "#ffff",
+                        }}
+                        search={{ placeholder: "Buscar equipo..." }}
+                        placeholder="Equipo"
+                        keyExtractor={(item) => item.id}
+                      />
+                      <TouchableOpacity
+                        style={styles.addButton}
+                        onPress={agregarEquipo}
+                      >
+                        <Text style={styles.addButtonText}>Agregar</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </>
+              ) : null}
+
+              {equiposAgregados.length > 0 && (
+                <>
+                  <Text style={styles.label}>Equipos agregados:</Text>
+                  <View style={{ width: "80%" }}>
+                    <ScrollView style={styles.equiposAgregados}>
+                      {equiposAgregados.map((equipo) => (
+                        <View style={styles.equipoItem} key={equipo.key}>
+                          <Text style={styles.equipoNombre}>
+                            {equipo.value}
+                          </Text>
+                          <TouchableOpacity
+                            style={styles.removeButton}
+                            onPress={() => quitarEquipo(equipo.key)}
+                          >
+                            <Text style={styles.removeButtonText}>Quitar</Text>
+                          </TouchableOpacity>
+                        </View>
+                      ))}
+                    </ScrollView>
+                  </View>
+                </>
+              )}
             </>
+          ) : null}
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={calcularEnfrentamientos}
+          >
+            <Text style={styles.addButtonText}>Calcular enfrentamientos</Text>
+          </TouchableOpacity>
+          <MatchupList matchups={matchups} />
+          {tipoTorneo === "clasificatoria" && (
+            <SelectList
+              setSelected={(val) => setEtapaSeleccionada(val)}
+              data={etapas}
+              save="key"
+              inputStyles={{
+                marginHorizontal: 40,
+                color: "blue",
+                backgroundColor: "#ffff",
+              }}
+              boxStyles={{ borderColor: "blue", backgroundColor: "#ffff" }}
+              search={{ placeholder: "Buscar etapa..." }}
+              placeholder="Etapa del torneo"
+              keyExtractor={(item) => item.key}
+            />
           )}
-        </>
-      ) : null}
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={calcularEnfrentamientos}
-      >
-        <Text style={styles.addButtonText}>Calcular enfrentamientos</Text>
-      </TouchableOpacity>
-      <MatchupList matchups={matchups} />
-    </View>
-
-    </ScrollView>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   )
 }
@@ -356,7 +375,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 18,
     marginBottom: 8,
-    marginTop:10
+    marginTop: 10,
   },
   input: {
     width: "100%",
@@ -389,8 +408,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderRadius: 25,
     backgroundColor: "#003d7c",
-    marginLeft: 25
-   
+    marginLeft: 25,
   },
   addButtonText: {
     color: "#fff",
@@ -418,7 +436,6 @@ const styles = StyleSheet.create({
     borderColor: "blue",
     borderRadius: 5,
     maxHeight: 150,
-    
   },
   equipoItem: {
     flexDirection: "row",
@@ -431,7 +448,7 @@ const styles = StyleSheet.create({
   },
   equipoNombre: {
     fontSize: 16,
-    marginRight:5
+    marginRight: 5,
   },
   removeButton: {
     backgroundColor: "red",
@@ -444,12 +461,13 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
-  disclaimer:{
-    marginTop:10,
+  disclaimer: {
+    marginTop: 10,
     fontSize: 12,
     fontStyle: "italic",
     color: "gray",
-  },bg: {
+  },
+  bg: {
     width: "100%",
     height: 400,
     position: "absolute",

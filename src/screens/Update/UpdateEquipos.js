@@ -1,6 +1,5 @@
-import { useFormik } from "formik";
-import { ScrollView } from "react-native-gesture-handler";
-import { SelectList } from "react-native-dropdown-select-list";
+import { ScrollView } from "react-native-gesture-handler"
+import { SelectList } from "react-native-dropdown-select-list"
 import {
   View,
   Text,
@@ -9,20 +8,17 @@ import {
   SafeAreaView,
   Pressable,
   Image,
-  Alert,
-  Linking,
-} from "react-native";
-import React, { useState, useEffect } from "react";
-import * as SecureStore from "expo-secure-store";
+} from "react-native"
+import React, { useState, useEffect } from "react"
 import {
   ActuEquipo,
   traerInstituciones,
   traerEquipoById,
-} from "../../api/torneos";
-import JWTManager from "../../api/JWTManager";
-import * as ImagePicker from "expo-image-picker";
+} from "../../api/torneos"
+import JWTManager from "../../api/JWTManager"
+import * as ImagePicker from "expo-image-picker"
 
-const jwtManager = new JWTManager();
+const jwtManager = new JWTManager()
 export default function UpdateEquipos(props) {
   const {
     onPress,
@@ -30,55 +26,53 @@ export default function UpdateEquipos(props) {
     title2 = "Seleccionar Foto",
     navigation,
     route: { params },
-  } = props;
-  const [selectedInsti, setSelectedInsti] = React.useState("");
-  const [infoInstitution, setDataInsti] = useState([]);
-  const [image, setImage] = useState(null);
-  let [equipo, setEquipo] = useState({});
+  } = props
+  const [selectedInsti, setSelectedInsti] = React.useState("")
+  const [infoInstitution, setDataInsti] = useState([])
+  const [image, setImage] = useState(null)
+  let [equipo, setEquipo] = useState({})
   useEffect(() => {
     const fetchData = async () => {
-      const jwt = await jwtManager.getToken();
+      const jwt = await jwtManager.getToken()
       if (!jwt) {
-        return;
+        return
       }
-      const response = await traerInstituciones(jwt);
+      const response = await traerInstituciones(jwt)
       setDataInsti(
         response.Institutions.map((item) => {
           return {
             key: item.id,
             value: item.name,
-          };
+          }
         })
-      );
-    };
-    fetchData();
-  }, []);
+      )
+    }
+    fetchData()
+  }, [])
   useEffect(() => {
     const traerEquipo = async () => {
-      const jwt = await jwtManager.getToken();
+      const jwt = await jwtManager.getToken()
       if (!jwt) {
-        return;
+        return
       }
-      const response = await traerEquipoById(jwt, params.id);
-      console.log(response.data.Teams);
-      setEquipo(
-        {
-          id: response.data.Teams.id,
-          name: response.data.Teams.name,
-          fk_institutions_id: response.data.Teams.fk_institutions_id,
-          cel_phone: response.data.Teams.cel_phone,
-          landline: response.data.Teams.landline,
-          email: response.data.Teams.email,
-          matches_played: response.data.Teams.matches_played,
-          matches_won: response.data.Teams.matches_won,
-          matches_tied: response.data.Teams.matches_tied,
-          matches_lost: response.data.Teams.matches_lost,
-          image_64: response.data.Teams.image_path
-        }
-      );
-    };
-    traerEquipo();
-  }, []);
+      const response = await traerEquipoById(jwt, params.id)
+      console.log(response.data.Teams)
+      setEquipo({
+        id: response.data.Teams.id,
+        name: response.data.Teams.name,
+        fk_institutions_id: response.data.Teams.fk_institutions_id,
+        cel_phone: response.data.Teams.cel_phone,
+        landline: response.data.Teams.landline,
+        email: response.data.Teams.email,
+        matches_played: response.data.Teams.matches_played,
+        matches_won: response.data.Teams.matches_won,
+        matches_tied: response.data.Teams.matches_tied,
+        matches_lost: response.data.Teams.matches_lost,
+        image_64: response.data.Teams.image_path,
+      })
+    }
+    traerEquipo()
+  }, [])
   const pickImage = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -87,49 +81,46 @@ export default function UpdateEquipos(props) {
         aspect: [4, 3],
         quality: 1,
         base64: true,
-      });
+      })
       if (!result.canceled) {
-        setImage(result.assets[0].uri);
+        setImage(result.assets[0].uri)
         onChangeImage("data:image/png;base64," + result.assets[0].base64)
       } else {
-        equipo.image_64 = null;
+        equipo.image_64 = null
       }
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   const onChangeName = (value) => {
-    setEquipo({ ...equipo, name: value });
-  };
+    setEquipo({ ...equipo, name: value })
+  }
 
   const onChangePhone = (value) => {
-    setEquipo({ ...equipo, cel_phone: value });
-  };
+    setEquipo({ ...equipo, cel_phone: value })
+  }
 
   const onChangeLandline = (value) => {
-    setEquipo({ ...equipo, landline: value });
-  };
+    setEquipo({ ...equipo, landline: value })
+  }
 
   const onChangeEmail = (value) => {
-    setEquipo({ ...equipo, email: value });
-  };
+    setEquipo({ ...equipo, email: value })
+  }
 
   const onChangeImage = (value) => {
-    setEquipo({ ...equipo, image_64: value });
-  };
+    setEquipo({ ...equipo, image_64: value })
+  }
 
-  
-
-
-  const updateData = async ()=> {
-     const jwt = await jwtManager.getToken();
-       if (!jwt) {
-         return;
-       }
-       console.log(equipo);
-       const response = ActuEquipo(jwt, equipo)
-      console.log(equipo);
+  const updateData = async () => {
+    const jwt = await jwtManager.getToken()
+    if (!jwt) {
+      return
+    }
+    console.log(equipo)
+    const response = ActuEquipo(jwt, equipo)
+    console.log(equipo)
   }
 
   // const { values, isSubmitting, setFieldValue, handleSubmit } = useFormik({
@@ -152,23 +143,21 @@ export default function UpdateEquipos(props) {
   //     //crearEquipo(token, values);
   //   },
   // });
-  equipo.fk_institutions_id = selectedInsti;
+  equipo.fk_institutions_id = selectedInsti
   return (
     <SafeAreaView>
       <ScrollView style={styles.scroll}>
-      <View  style={styles.container}  >
-      <View style={styles.bg} />
-      <Image
+        <View style={styles.container}>
+          <View style={styles.bg} />
+          <Image
             style={{ width: 350, height: 300, marginBottom: 10 }}
             source={require("../../../assets/equipo.png")}
           />
-      </View>
-    <View  style={styles.container}  >
-
+        </View>
+        <View style={styles.container}>
           <Text style={styles.titulo}>Digite los datos</Text>
 
           <TextInput
-            
             style={styles.textInput}
             value={equipo.name}
             onChangeText={(value) => onChangeName(value)}
@@ -230,7 +219,7 @@ export default function UpdateEquipos(props) {
         </View>
       </ScrollView>
     </SafeAreaView>
-  );
+  )
 }
 const styles = StyleSheet.create({
   container: {
@@ -293,4 +282,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#003d7c",
     transform: [{ scaleX: 2 }],
   },
-});
+})

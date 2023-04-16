@@ -1,28 +1,20 @@
 import { useNavigation, NavigationContainer } from "@react-navigation/native"
 import "react-native-gesture-handler"
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  SafeAreaView,
-  StyleSheet,
-} from "react-native"
+
 import Navigation from "./src/navigation/Navigation"
 import { createStackNavigator } from "@react-navigation/stack"
 import LoginForm from "./src/components/LoginForm"
-import HomeScreen from "./src/screens/HomeScreen"
-import CreateJugador from "./src/screens/CreateJugador"
-import CreateInstitucion from "./src/screens/CreateInstitucion"
-import CreateEquipos from "./src/screens/CreateEquipos"
-import CreateTorneos from "./src/screens/CreateTorneos"
-import UpdateJugador from "./src/screens/Update/UpdateJugador"
-import UpdateEquipos from "./src/screens/Update/UpdateEquipos"
-import Equipo from "./src/screens/Equipo"
-import Jugador from "./src/screens/Jugador"
-import Enfrentamientos from "./src/screens/Enfrentamientos"
-import Torneo from "./src/screens/Torneo"
-import MatchupDetails from "./src/screens/MatchupDetails"
+import CreateJugador from "./src/screens/create/CreateJugador"
+import CreateInstitucion from "./src/screens/create/CreateInstitucion"
+import CreateEquipos from "./src/screens/create/CreateEquipos"
+import CreateTorneos from "./src/screens/create/CreateTorneos"
+import UpdateJugador from "./src/screens/update/UpdateJugador"
+import UpdateEquipos from "./src/screens/update/UpdateEquipos"
+import Equipo from "./src/screens/equipos/Equipo"
+import Jugador from "./src/screens/participantes/Jugador"
+import Enfrentamientos from "./src/screens/matchup/Enfrentamientos"
+import Torneo from "./src/screens/matchup/Torneo"
+import MatchupDetails from "./src/screens/matchup/MatchupDetails"
 const Stack = createStackNavigator()
 
 export default function App() {
@@ -32,11 +24,6 @@ export default function App() {
         <Stack.Screen
           name="LoginA"
           component={LoginForm}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="HomeS"
-          component={HomeScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen

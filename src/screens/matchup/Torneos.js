@@ -1,15 +1,8 @@
 import React, { useEffect } from "react"
-import {
-  SafeAreaView,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  View,
-  RefreshControl,
-} from "react-native"
-import { traerTorneos } from "../api/torneos"
+import { SafeAreaView, StyleSheet, ActivityIndicator, View } from "react-native"
+import { traerTorneos } from "../../api/torneos"
 import * as SecureStore from "expo-secure-store"
-import TorneosList from "../components/TorneosList"
+import TorneosList from "../../components/lists/TorneosList"
 export default function Torneos({ navigation }) {
   const [torneos, setTorneos] = React.useState([])
   const [refreshing, setRefreshing] = React.useState(false)

@@ -1,6 +1,6 @@
-import { useFormik } from "formik";
-import { ScrollView } from "react-native-gesture-handler";
-import { SelectList } from "react-native-dropdown-select-list";
+import { useFormik } from "formik"
+import { ScrollView } from "react-native-gesture-handler"
+import { SelectList } from "react-native-dropdown-select-list"
 import {
   View,
   Text,
@@ -9,26 +9,26 @@ import {
   SafeAreaView,
   Pressable,
   Image,
-  TouchableOpacity
-} from "react-native";
-import React, { useState, useEffect } from "react";
-import * as SecureStore from "expo-secure-store";
-import { crearEquipo, traerInstituciones } from "../api/torneos";
-import JWTManager from "../api/JWTManager";
-import * as ImagePicker from "expo-image-picker";
+  TouchableOpacity,
+} from "react-native"
+import React, { useState, useEffect } from "react"
+import * as SecureStore from "expo-secure-store"
+import { crearEquipo, traerInstituciones } from "../../api/torneos"
+import JWTManager from "../../api/JWTManager"
+import * as ImagePicker from "expo-image-picker"
 import DateTimePicker from "@react-native-community/datetimepicker"
 
-const jwtManager = new JWTManager();
+const jwtManager = new JWTManager()
 export default function CreateEquipos(props) {
   const {
     onPress,
     title = "Crear Equipo",
     title2 = "Seleccionar Foto",
     navigation,
-  } = props;
-  const [selectedInsti, setSelectedInsti] = React.useState("");
-  const [infoInstitution, setDataInsti] = useState([]);
-  const [image, setImage] = useState(null);
+  } = props
+  const [selectedInsti, setSelectedInsti] = React.useState("")
+  const [infoInstitution, setDataInsti] = useState([])
+  const [image, setImage] = useState(null)
 
   const [date, setDate] = useState(new Date())
   const [showDatePicker, setShowDatePicker] = useState(false)
@@ -41,22 +41,22 @@ export default function CreateEquipos(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const jwt = await jwtManager.getToken();
+      const jwt = await jwtManager.getToken()
       if (!jwt) {
-        return;
+        return
       }
-      const response = await traerInstituciones(jwt);
+      const response = await traerInstituciones(jwt)
       setDataInsti(
         response.Institutions.map((item) => {
           return {
             key: item.id,
             value: item.name,
-          };
+          }
         })
-      );
-    };
-    fetchData();
-  }, []);
+      )
+    }
+    fetchData()
+  }, [])
 
   const pickImage = async () => {
     try {
@@ -66,17 +66,17 @@ export default function CreateEquipos(props) {
         aspect: [4, 3],
         quality: 1,
         base64: true,
-      });
+      })
       if (!result.canceled) {
-        setImage(result.assets[0].uri);
-        values.image_64 = "data:image/png;base64," + result.assets[0].base64;
+        setImage(result.assets[0].uri)
+        values.image_64 = "data:image/png;base64," + result.assets[0].base64
       } else {
-        values.image_64 = null;
+        values.image_64 = null
       }
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   const { values, isSubmitting, setFieldValue, handleSubmit } = useFormik({
     initialValues: {
@@ -94,24 +94,24 @@ export default function CreateEquipos(props) {
       image_64: "",
     },
     onSubmit: async (values) => {
-      console.log(values);
-      const token = await SecureStore.getItemAsync("token");
-      crearEquipo(token, values);
+      console.log(values)
+      const token = await SecureStore.getItemAsync("token")
+      crearEquipo(token, values)
     },
-  });
-  values.fk_institutions_id = selectedInsti;
+  })
+  values.fk_institutions_id = selectedInsti
   values.date_birth = date
   return (
     <SafeAreaView>
       <ScrollView style={styles.scroll}>
-      <View  style={styles.container}  >
-      <View style={styles.bg} />
-      <Image
-            style={{ width: 350, height: 300, marginTop:10 }}
-            source={require("../../assets/equipo.png")}
+        <View style={styles.container}>
+          <View style={styles.bg} />
+          <Image
+            style={{ width: 350, height: 300, marginTop: 10 }}
+            source={require("../../../assets/equipo.png")}
           />
-      </View>
-      <View  style={styles.container}  >
+        </View>
+        <View style={styles.container}>
           <Text style={styles.titulo}>Digite los datos del equipo</Text>
 
           <TextInput
@@ -151,7 +151,9 @@ export default function CreateEquipos(props) {
           <View style={styles.infoContainer}>
             <Text style={styles.label}>Fecha de Creacion:</Text>
             <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-              <Text style={styles.textInputDate}>{date.toLocaleDateString()}</Text>
+              <Text style={styles.textInputDate}>
+                {date.toLocaleDateString()}
+              </Text>
             </TouchableOpacity>
             {showDatePicker && (
               <DateTimePicker
@@ -198,7 +200,7 @@ export default function CreateEquipos(props) {
         </View>
       </ScrollView>
     </SafeAreaView>
-  );
+  )
 }
 const styles = StyleSheet.create({
   container: {
@@ -262,7 +264,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#003d7c",
     transform: [{ scaleX: 2 }],
   },
-   textInputDate: {
+  textInputDate: {
     borderWidth: 1,
     borderColor: "blue",
     padding: 10,
@@ -279,9 +281,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   label: {
-    marginTop:15,
+    marginTop: 15,
     fontSize: 15,
     width: 100,
-    color:"gray"
+    color: "gray",
   },
-});
+})

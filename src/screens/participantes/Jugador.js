@@ -1,10 +1,16 @@
-import { View, Text, SafeAreaView, StyleSheet , TouchableOpacity} from "react-native"
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native"
 import React, { useState, useEffect } from "react"
-import { traerJugadorById, eliminarJugador } from "../api/torneos"
-import JWTManager from "../api/JWTManager"
+import { traerJugadorById, eliminarJugador } from "../../api/torneos"
+import JWTManager from "../../api/JWTManager"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
-import Modal from 'react-native-modal';
+import Modal from "react-native-modal"
 const jwtManager = new JWTManager()
 
 export default function Jugador(props) {
@@ -14,27 +20,26 @@ export default function Jugador(props) {
   } = props
   const [jugador, setJugador] = useState(null)
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false)
   const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
+    setModalVisible(!isModalVisible)
+  }
 
-
-  const eliminar = async() => {
+  const eliminar = async () => {
     try {
-        const jwt = await jwtManager.getToken()
-        if (!jwt) {
-          return
-        }
-        const response = await eliminarJugador(jwt, jugador.id)
-        console.log(response);
-        if(response.message == "Participante desactivado."){
-          navigation.goBack()
-        }
-      } catch (error) {
-        console.error(error)
+      const jwt = await jwtManager.getToken()
+      if (!jwt) {
+        return
+      }
+      const response = await eliminarJugador(jwt, jugador.id)
+      console.log(response)
+      if (response.message == "Participante desactivado.") {
         navigation.goBack()
       }
+    } catch (error) {
+      console.error(error)
+      navigation.goBack()
+    }
   }
 
   useEffect(() => {
@@ -71,22 +76,24 @@ export default function Jugador(props) {
       headerRight: () => (
         <View style={styles.headerRightContainer}>
           <TouchableWithoutFeedback
-            onPress={() => navigation.navigate("UpdateJugador", { id: params.id })}
+            onPress={() =>
+              navigation.navigate("UpdateJugador", { id: params.id })
+            }
           >
             <Ionicons name="ios-pencil-outline" size={38} color="#1d5bad" />
           </TouchableWithoutFeedback>
-  
+
           <TouchableWithoutFeedback
             onPress={() => {
-              setModalVisible(true);
+              setModalVisible(true)
             }}
           >
             <Ionicons name="ios-remove-outline" size={38} color="#1d5bad" />
           </TouchableWithoutFeedback>
         </View>
       ),
-    });
-  }, [jugador]);
+    })
+  }, [jugador])
   if (!jugador) return null
   return (
     <>
@@ -94,24 +101,24 @@ export default function Jugador(props) {
       <SafeAreaView style={styles.container}>
         <View style={styles.content}>
           <View style={styles.infocontainer}>
-          <Text style={styles.name}>Nombre:</Text>  
-          <Text style={styles.name}> {jugador.names}</Text>
+            <Text style={styles.name}>Nombre:</Text>
+            <Text style={styles.name}> {jugador.names}</Text>
           </View>
           <View style={styles.infocontainer}>
-          <Text style={styles.name}>Apellido:</Text>  
-          <Text style={styles.name}> {jugador.surnames}</Text> 
+            <Text style={styles.name}>Apellido:</Text>
+            <Text style={styles.name}> {jugador.surnames}</Text>
           </View>
           <View style={styles.infocontainer}>
-          <Text style={styles.name}>Email:</Text>  
-          <Text style={styles.name}> {jugador.email}</Text>
+            <Text style={styles.name}>Email:</Text>
+            <Text style={styles.name}> {jugador.email}</Text>
           </View>
           <View style={styles.infocontainer}>
-          <Text style={styles.name}>Celular:</Text>  
-          <Text style={styles.name}> {jugador.cel_phone}</Text>
+            <Text style={styles.name}>Celular:</Text>
+            <Text style={styles.name}> {jugador.cel_phone}</Text>
           </View>
           <View style={styles.infocontainer}>
-          <Text style={styles.name}>identificacion:</Text>  
-          <Text style={styles.name}> {jugador.identification}</Text>
+            <Text style={styles.name}>identificacion:</Text>
+            <Text style={styles.name}> {jugador.identification}</Text>
           </View>
         </View>
 
@@ -119,19 +126,23 @@ export default function Jugador(props) {
           isVisible={modalVisible}
           onBackdropPress={() => setModalVisible(false)}
         >
-          <View style={{ backgroundColor: 'white', padding: 20 }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+          <View style={{ backgroundColor: "white", padding: 20 }}>
+            <Text
+              style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}
+            >
               ¿Está seguro que desea eliminar al jugador?
             </Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <Text style={{ color: 'red', marginRight: 10 }}>Cancelar</Text>
+                <Text style={{ color: "red", marginRight: 10 }}>Cancelar</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={async() => {
-                 await eliminar();
-                setModalVisible(false);
-              }}>
-                <Text style={{ color: 'blue' }}>Aceptar</Text>
+              <TouchableOpacity
+                onPress={async () => {
+                  await eliminar()
+                  setModalVisible(false)
+                }}
+              >
+                <Text style={{ color: "blue" }}>Aceptar</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -179,10 +190,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingRight: 10,
-    width: 100, 
+    width: 100,
   },
-  infocontainer:{
-    flexDirection: "row"
+  infocontainer: {
+    flexDirection: "row",
   },
   container: {
     marginTop: 40,

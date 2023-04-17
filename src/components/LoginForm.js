@@ -1,4 +1,4 @@
-import react, { useState, useEffect } from "react";
+import react, { useState, useEffect } from "react"
 import {
   TextInput,
   Button,
@@ -9,26 +9,27 @@ import {
   Pressable,
   Alert,
   SafeAreaView,
-} from "react-native";
-import { login } from "../api/torneos";
-import { useFormik } from "formik";
-import JWTManager from "../api/JWTManager";
+} from "react-native"
+import { login } from "../api/torneos"
+import { useFormik } from "formik"
+import JWTManager from "../api/JWTManager"
+import * as SecureStore from "expo-secure-store"
 
-const jwtManager = new JWTManager();
+const jwtManager = new JWTManager()
 
 export default function LoginForm(props) {
-  const { onPress, title = "Login", navigation } = props;
-  const [username, setUsername] = useState("");
-  const [token, setToken] = useState(null);
+  const { onPress, title = "Login", navigation } = props
+  const [username, setUsername] = useState("")
+  const [token, setToken] = useState(null)
   useEffect(() => {
     const validarToken = async () => {
-      const token = await jwtManager.getToken();
+      const token = await jwtManager.getToken()
       if (token) {
-        navigation.navigate("Navigation");
+        navigation.navigate("Navigation")
       }
-    };
+    }
     // validarToken();
-  }, []);
+  }, [])
 
   const { values, isSubmitting, setFieldValue, handleSubmit } = useFormik({
     initialValues: {
@@ -37,13 +38,14 @@ export default function LoginForm(props) {
     },
 
     onSubmit: async (values) => {
-      const tokenService = await login(values);
+      const tokenService = await login(values)
       if (!(tokenService === undefined)) {
-        jwtManager.setJWT(tokenService.access_token);
-        navigation.navigate("Navigation");
+        jwtManager.setJWT(tokenService.access_token)
+        SecureStore.setItemAsync("userId", tokenService.user_id.toString())
+        navigation.navigate("Navigation")
       }
     },
-  });
+  })
 
   return (
     <View style={styles.container}>
@@ -72,7 +74,7 @@ export default function LoginForm(props) {
         </Pressable>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -117,4 +119,4 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     color: "white",
   },
-});
+})

@@ -15,12 +15,16 @@ import {
   traerInstituciones,
   traerEquiposPorInstitucion,
   calcularPartidos,
+  calcularEtapaClasificatoria,
+  crearTorneo,
 } from "../../api/torneos"
 import { SelectList } from "react-native-dropdown-select-list"
 import JWTManager from "../../api/JWTManager"
 const jwtManager = new JWTManager()
 import MatchupList from "../matchup/MatchupList"
-export default function CreateTorneos() {
+import * as SecureStore from "expo-secure-store"
+export default function CreateTorneos(props) {
+  const { navigation } = props
   const [jwt, setJwt] = useState("")
   const [nombreTorneo, setNombreTorneo] = useState("")
   const [deporteSeleccionado, setDeporteSeleccionado] = useState("")
@@ -41,11 +45,12 @@ export default function CreateTorneos() {
     setNumEquipos(equiposAgregados.length)
   }, [equiposAgregados])
   useEffect(() => {
-    if (tipoTorneo === "clasificatoria") {
+    if (tipoTorneo == 2) {
       const fetchEtapas = async () => {
         try {
+          console.log(tipoTorneo, "Tipo", numEquipos, "Equipos")
           const response = await calcularEtapaClasificatoria(jwt, numEquipos)
-          const etapasData = response.stages.map((etapa) => ({
+          const etapasData = response.data.stages.map((etapa) => ({
             key: etapa.id,
             value: etapa.name,
           }))
@@ -84,6 +89,48 @@ export default function CreateTorneos() {
     // })
 
     setMatchups(response.data.data.matchups)
+  }
+  const eliminarImg64DeEquipos = (matchups) => {
+    return matchups.map((matchup, index) => {
+      const teams = matchup.map((team) => {
+        const { img_64, ...rest } = team
+        return rest
+      })
+      return { position: "", place: "", date: "", hour: "", teams }
+    })
+  }
+  const handleCrearTorneo = async () => {
+    const userId = await SecureStore.getItemAsync("userId")
+
+    const currentDate = new Date()
+    const formattedDate = `${currentDate.getFullYear()}/${(
+      currentDate.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}/${currentDate.getDate().toString().padStart(2, "0")}`
+    const initialMatchups = eliminarImg64DeEquipos(matchups)
+    const torneo = {
+      tournament: {
+        fk_users_admin_id: parseInt(userId),
+        fk_sports_id: deporteSeleccionado,
+        fk_types_tournament_id: tipoTorneo,
+        fk_states_tournament_id: 1,
+        fk_stages_id: etapaSeleccionada,
+        fk_team_id_winner: null,
+        name: nombreTorneo,
+        start_date: formattedDate, // Reemplaza esto con la fecha de inicio seleccionada
+        end_date: null,
+        state: 1,
+      },
+      teams_id: equiposAgregados.map((equipo) => equipo.key),
+      initial_matchups: initialMatchups,
+    }
+
+    const response = await crearTorneo(jwt, torneo)
+    if (response.data.status === 200) {
+      console.log("Torneo creado")
+      navigation.goBack()
+    }
   }
   useEffect(() => {
     async function fetchData() {
@@ -337,22 +384,33 @@ export default function CreateTorneos() {
             <Text style={styles.addButtonText}>Calcular enfrentamientos</Text>
           </TouchableOpacity>
           <MatchupList matchups={matchups} />
-          {tipoTorneo === "clasificatoria" && (
-            <SelectList
-              setSelected={(val) => setEtapaSeleccionada(val)}
-              data={etapas}
-              save="key"
-              inputStyles={{
-                marginHorizontal: 40,
-                color: "blue",
-                backgroundColor: "#ffff",
-              }}
-              boxStyles={{ borderColor: "blue", backgroundColor: "#ffff" }}
-              search={{ placeholder: "Buscar etapa..." }}
-              placeholder="Etapa del torneo"
-              keyExtractor={(item) => item.key}
-            />
-          )}
+          {tipoTorneo == 2 && matchups.length > 0 ? (
+            <>
+              <Text style={styles.label}>Selecciona la etapa del torneo:</Text>
+              <SelectList
+                setSelected={(val) => setEtapaSeleccionada(val)}
+                data={etapas}
+                save="key"
+                inputStyles={{
+                  marginHorizontal: 40,
+                  color: "blue",
+                  backgroundColor: "#ffff",
+                }}
+                boxStyles={{ borderColor: "blue", backgroundColor: "#ffff" }}
+                search={{ placeholder: "Buscar etapa..." }}
+                placeholder="Etapa"
+                keyExtractor={(item) => item.key}
+              />
+            </>
+          ) : null}
+          {etapaSeleccionada ? (
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={handleCrearTorneo}
+            >
+              <Text style={styles.addButtonText}>Crear Torneo</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       </ScrollView>
     </SafeAreaView>

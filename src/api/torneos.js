@@ -542,7 +542,7 @@ export async function crearTorneo(token, torneo) {
 
 export async function calcularEtapaClasificatoria(token, numEquipos) {
   try {
-    const url = `${API_HOST}/calculate/tournament/stage`
+    const url = `${API_HOST}/stages/tournament/read/teams/size`
     const response = await axios.put(
       url,
       { num_teams: numEquipos },

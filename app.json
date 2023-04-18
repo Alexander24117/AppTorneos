@@ -20,7 +20,8 @@
       ]
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/9f7771df-ed4e-413f-b289-e617295c91c0"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -29,6 +30,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.unibague.BMovil",
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#07162a"
@@ -36,6 +38,14 @@
     },
     "web": {
       "favicon": "./assets/logo.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9f7771df-ed4e-413f-b289-e617295c91c0"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
   }
 }

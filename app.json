@@ -21,7 +21,8 @@
            "android": {
             "compiledSdkVersion": 28,
             "targetSdkVersion": 28,
-            "buildToolsVersion": "28.0.3"
+            "buildToolsVersion": "28.0.3",
+            "minSdkVersion": 23
            }
           }
         ]

@@ -6,11 +6,12 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "ios": {
-        "resourceClass": "m-medium"
-      },
       "android": {
-        "buildType": "apk"
+        "credentialsSource": "remote",
+        "distribution": "internal",
+        "developmentClient": true,
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease"
       }
     },
     "preview": {

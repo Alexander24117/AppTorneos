@@ -12,17 +12,13 @@
       "backgroundColor": "#07162a",
       "plugins": [
         [
-          "expo-image-picker",
-          {
-            "photosPermission": "The app accesses your photos to let you share them with your friends."
-          },
-         "expo-build-properties",
+          "expo-build-properties",
           {
            "android": {
             "compiledSdkVersion": 28,
             "targetSdkVersion": 28,
             "buildToolsVersion": "28.0.3",
-            "minSdkVersion": 23
+            "minSdkVersion": 28
            }
           }
         ]

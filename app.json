@@ -49,8 +49,6 @@
         "projectId": "9f7771df-ed4e-413f-b289-e617295c91c0"
       }
     },
-    "runtimeVersion": {
-      "policy": "sdkVersion"
-    }
+    "runtimeVersion": "exposdk:48.0.11"
   }
 }

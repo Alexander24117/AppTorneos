@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "B-Sports Movil",
-    "slug": "B-Sports Movil",
+    "slug": "b-sports-movil",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
@@ -14,19 +14,19 @@
         [
           "expo-build-properties",
           {
-           "android": {
-            "compiledSdkVersion": 28,
-            "targetSdkVersion": 28,
-            "buildToolsVersion": "28.0.3",
-            "minSdkVersion": 28
-           }
+            "android": {
+              "compiledSdkVersion": 28,
+              "targetSdkVersion": 28,
+              "buildToolsVersion": "28.0.3",
+              "minSdkVersion": 28
+            }
           }
         ]
       ]
     },
     "updates": {
       "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/9f7771df-ed4e-413f-b289-e617295c91c0"
+      "url": "https://u.expo.dev/befc9cbc-3724-4f4a-a798-64f071b6feee"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -46,9 +46,10 @@
     },
     "extra": {
       "eas": {
-        "projectId": "9f7771df-ed4e-413f-b289-e617295c91c0"
+        "projectId": "befc9cbc-3724-4f4a-a798-64f071b6feee"
       }
     },
-    "runtimeVersion": "exposdk:48.0.11"
+    "runtimeVersion": "exposdk:48.0.11",
+    "owner": "alexander24117"
   }
 }

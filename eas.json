@@ -4,12 +4,12 @@
   },
   "build": {
     "development": {
-      "developmentClient": true,
+      "developmentClient": false,
       "distribution": "internal",
       "android": {
         "credentialsSource": "remote",
         "distribution": "internal",
-        "developmentClient": true,
+        "developmentClient": false,
         "buildType": "apk",
         "gradleCommand": ":app:assembleRelease"
       }

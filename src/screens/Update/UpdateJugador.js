@@ -6,12 +6,13 @@ import {
   SafeAreaView,
   Pressable,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  ToastAndroid
 } from "react-native"
 import React, { useState, useEffect } from "react"
 import { ScrollView } from "react-native-gesture-handler"
 import { SelectList } from "react-native-dropdown-select-list"
-import { departamentos, ciudades, traerJugadorById, ActuJugador } from "../../api/torneos"
+import { departamentos, ciudades, traerJugadorById, ActuJugador, ciudadesPorDepartment,} from "../../api/torneos"
 import JWTManager from "../../api/JWTManager"
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker"
@@ -27,15 +28,45 @@ export default function UpdateJugador(props) {
     route: { params },
   } = props
   const [info, setData] = useState(null)
-  const [infoCiudad, setDataCiudad] = useState(null)
-  const [selected, setSelected] = React.useState("")
-  const [selectedCiudad, setselectedCiudad] = React.useState("")
+  const [infoDepartment, setDataDepartment] = useState([])
+  const [infoCiudad, setDataCiudad] = useState([])
   const [image, setImage] = useState(null);
+
+  const [selectedDeparment, setSelectedDeparment] = React.useState("")
+  const [selectedCiudad, setselectedCiudad] = React.useState("")
 
   const [date, setDate] = useState(new Date())
   const [showDatePicker, setShowDatePicker] = useState(false)
 
   let [jugador, setJugador] = useState({});
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const jwt = await jwtManager.getToken()
+  //     if (!jwt) {
+  //       return
+  //     }
+  //     const response = await departamentos(jwt)
+  //     setData(
+  //       response.Departments.map((item) => {
+  //         return {
+  //           key: item.id,
+  //           value: item.name,
+  //         }
+  //       })
+  //     )
+  //     const responseCiudad = await ciudades(jwt)
+  //     setDataCiudad(
+  //       responseCiudad.Cities.map((item) => {
+  //         return {
+  //           key: item.id,
+  //           value: item.name,
+  //           idDepa: item.fk_departments_id,
+  //         }
+  //       })
+  //     )
+  //   }
+  //   fetchData()
+  // }, [])
   useEffect(() => {
     const fetchData = async () => {
       const jwt = await jwtManager.getToken()
@@ -43,7 +74,7 @@ export default function UpdateJugador(props) {
         return
       }
       const response = await departamentos(jwt)
-      setData(
+      setDataDepartment(
         response.Departments.map((item) => {
           return {
             key: item.id,
@@ -51,19 +82,37 @@ export default function UpdateJugador(props) {
           }
         })
       )
-      const responseCiudad = await ciudades(jwt)
+    }
+    fetchData()
+  }, [])
+
+  useEffect(() => {
+    if (!selectedDeparment) {
+      return
+    }
+    const fetchMunicipios = async () => {
+      const jwt = await jwtManager.getToken()
+      if (!jwt) {
+        return
+      }
+      const response = await ciudadesPorDepartment(jwt, selectedDeparment)
       setDataCiudad(
-        responseCiudad.Cities.map((item) => {
+        response.Cities.map((item) => {
           return {
             key: item.id,
             value: item.name,
-            idDepa: item.fk_departments_id,
           }
         })
       )
     }
-    fetchData()
-  }, [])
+    fetchMunicipios()
+  }, [selectedDeparment])
+
+  const handleDepartamentoChange = (departamento) => {
+    console.log(selectedDeparment, "depar selected")
+    fetchMunicipios(selectedDeparment).then((data) => setMunicipios(data))
+  }
+
   useEffect(() => {
     const fetchJugador = async () => {
       const jwt = await jwtManager.getToken()
@@ -71,6 +120,7 @@ export default function UpdateJugador(props) {
         return
       }
       const response = await traerJugadorById(jwt, params.id)
+      
       setJugador({
         id: response.data.Participants.id,
         names: response.data.Participants.names,
@@ -82,9 +132,9 @@ export default function UpdateJugador(props) {
         email: response.data.Participants.email,
         date_birth: response.data.Participants.date_birth,
         state: response.data.Participants.state,
-        image_64: response.data.Participants.image_path
+        image_64: ""
       })
-      console.log(response.data.Participants)
+      // console.log(response.data.Participants)
     }
     fetchJugador()
   }, [params])
@@ -111,32 +161,39 @@ export default function UpdateJugador(props) {
     }
   };
 
-  const onChangeName = (value) => {
-    setJugador({ ...jugador, names: value });
-  };
+  // const onChangeName = (value) => {
+  //   setJugador({ ...jugador, names: value });
+  // };
 
-  const onChangeSurName = (value) => {
-    setJugador({ ...jugador, surnames: value });
-  };
+  // const onChangeSurName = (value) => {
+  //   setJugador({ ...jugador, surnames: value });
+  // };
 
-  const onChangePhone = (value) => {
-    setJugador({ ...jugador, cel_phone: value });
-  };
+  // const onChangePhone = (value) => {
+  //   setJugador({ ...jugador, cel_phone: value });
+  // };
 
-  const onChangeEmail = (value) => {
-    setJugador({ ...jugador, email: value });
-  };
+  // const onChangeEmail = (value) => {
+  //   setJugador({ ...jugador, email: value });
+  // };
 
-  const onChangeIdentification = (value) => {
-    setJugador({ ...jugador, identification: value });
-  };
+  // const onChangeIdentification = (value) => {
+  //   setJugador({ ...jugador, identification: value });
+  // };
   
-  const onChangeDateBirth = (value) => {
-    setJugador({ ...jugador, date_birth: value });
-  };
+  // const onChangeDateBirth = (value) => {
+  //   setJugador({ ...jugador, date_birth: value });
+  // };
 
-  const onChangeImage = (value) => {
-    setJugador({ ...jugador, image_64: value });
+  // const onChangeImage = (value) => {
+  //   setJugador({ ...jugador, image_64: value });
+  // };
+
+  const onChangeField = (field, value) => {
+    setJugador((jugador) => ({
+      ...jugador,
+      [field]: value,
+    }));
   };
 
   const updateData = async ()=> {
@@ -146,7 +203,9 @@ export default function UpdateJugador(props) {
       }
       console.log(jugador);
       const response = ActuJugador(jwt, jugador)
-     console.log(jugador);
+      console.log(response)
+     ToastAndroid.show('Se Actualizó el participante', ToastAndroid.SHORT);
+
  }
 
  const onDateChange = (event, selectedDate) => {
@@ -171,37 +230,36 @@ export default function UpdateJugador(props) {
       </View>
     <View  style={styles.container}  >
 
-          <Text style={styles.titulo}>Digite los datos</Text>
-          <TextInput
-            style={styles.textInput}
-            value={jugador.names}
-            onChangeText={(text) => onChangeName("names", text)}
-            placeholder="Nombres"
-          />
-          <TextInput
-            style={styles.textInput}
-            value={jugador.surnames}
-            onChangeText={(text) => onChangeSurName("surnames", text)}
-            placeholder="Apellidos"
-          />
-          <TextInput
-            style={styles.textInput}
-            value={jugador.identification}
-            onChangeText={(text) => onChangeIdentification("identification", text)}
-            placeholder="identificacion"
-          />
-          <TextInput
-            style={styles.textInput}
-            value={jugador.cel_phone}
-            onChangeText={(text) => onChangePhone("cel_phone", text)}
-            placeholder="Telefono"
-          />
-          <TextInput
-            style={styles.textInput}
-            value={jugador.email}
-            onChangeText={(text) => onChangeEmail("email", text)}
-            placeholder="Email"
-          />
+    <TextInput
+  style={styles.textInput}
+  value={jugador.names}
+  onChangeText={(text) => onChangeField("names", text)}
+  placeholder="Nombres"
+/>
+<TextInput
+  style={styles.textInput}
+  value={jugador.surnames}
+  onChangeText={(text) => onChangeField("surnames", text)}
+  placeholder="Apellidos"
+/>
+<TextInput
+  style={styles.textInput}
+  value={jugador.identification}
+  onChangeText={(text) => onChangeField("identification", text)}
+  placeholder="Identificación"
+/>
+<TextInput
+  style={styles.textInput}
+  value={jugador.cel_phone}
+  onChangeText={(text) => onChangeField("cel_phone", text)}
+  placeholder="Teléfono"
+/>
+<TextInput
+  style={styles.textInput}
+  value={jugador.email}
+  onChangeText={(text) => onChangeField("email", text)}
+  placeholder="Email"
+/>
 
           {/* <TextInput
             style={styles.textInput}
@@ -227,8 +285,8 @@ export default function UpdateJugador(props) {
 
           <View style={{ paddingVertical: 20, paddingBottom: -10, width: 320 }}>
             <SelectList
-              setSelected={(val) => setSelected(val)}
-              data={listdepartamentos}
+              setSelected={(val) => setSelectedDeparment(val)}
+              data={infoDepartment}
               save="key"
               inputStyles={{
                 marginHorizontal: 40,
@@ -238,24 +296,28 @@ export default function UpdateJugador(props) {
               boxStyles={{ borderColor: "blue", backgroundColor: "#ffff" }}
               search={{ placeholder: "aaaaaaaaa" }}
               placeholder="Departamento"
+              keyExtractor={(item) => item.key}
             />
           </View>
 
-          <View style={{ paddingVertical: 20, paddingBottom: -10, width: 320 }}>
-            <SelectList
-              setSelected={(val) => setselectedCiudad(val)}
-              data={data}
-              save="value"
-              inputStyles={{
-                marginHorizontal: 40,
-                color: "blue",
-                backgroundColor: "#ffff",
-              }}
-              boxStyles={{ borderColor: "blue", backgroundColor: "#ffff" }}
-              search={{ marginHorizontal: 40 }}
-              placeholder="Ciudad"
-            />
-          </View>
+          {selectedDeparment && (
+            <View
+              style={{ paddingVertical: 20, paddingBottom: -10, width: 320 }}
+            >
+              <SelectList
+                setSelected={(val) => setselectedCiudad(val)}
+                data={infoCiudad}
+                save="key"
+                inputStyles={{
+                  marginHorizontal: 40,
+                  color: "blue",
+                  backgroundColor: "#ffff",
+                }}
+                boxStyles={{ borderColor: "blue", backgroundColor: "#ffff" }}
+                search={{ marginHorizontal: 40 }}
+                placeholder="Ciudad"
+              />
+          </View>)}
 
           <View style={styles.FotoButton}>
             <Pressable style={styles.button} onPress={pickImage}>

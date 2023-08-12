@@ -7,6 +7,7 @@ import {
   Pressable,
   Image,
   TouchableOpacity,
+  ToastAndroid
 } from "react-native"
 import React, { useState, useEffect } from "react"
 import {
@@ -175,6 +176,7 @@ export default function CreateJugador(props) {
     onSubmit: async (values) => {
       const token = await SecureStore.getItemAsync("token")
       crearParticipantes(token, values)
+      ToastAndroid.show('Se Creo el participante', ToastAndroid.SHORT);
     },
   })
   values.fk_departments_id = selectedDeparment

@@ -9,6 +9,7 @@ import {
   Pressable,
   Alert,
   SafeAreaView,
+  ToastAndroid
 } from "react-native"
 import { login } from "../api/torneos"
 import { useFormik } from "formik"
@@ -38,12 +39,19 @@ export default function LoginForm(props) {
     },
 
     onSubmit: async (values) => {
-      const tokenService = await login(values)
-      if (!(tokenService === undefined)) {
-        jwtManager.setJWT(tokenService.access_token)
-        SecureStore.setItemAsync("userId", tokenService.user_id.toString())
-        navigation.navigate("Navigation")
-      }
+      try{
+        const tokenService = await login(values)
+        if (!(tokenService === undefined)) {
+          jwtManager.setJWT(tokenService.access_token)
+          SecureStore.setItemAsync("userId", tokenService.user_id.toString())
+          navigation.navigate("Navigation")
+        }
+        else if(tokenService === undefined){
+          ToastAndroid.show('Datos incorrectos', ToastAndroid.SHORT);
+        }} 
+        catch (error) {
+          throw error
+        }
     },
   })
 

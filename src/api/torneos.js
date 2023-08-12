@@ -90,7 +90,11 @@ export async function login(data) {
             password: "qweqwe"
         }*/
     )
-    token = response.access_token
+    if(!response)
+    {
+      console.error("Error en el login")
+    }
+    else{token = response.access_token}
     const result = response
     return result
   } catch (error) {

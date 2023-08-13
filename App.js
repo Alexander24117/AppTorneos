@@ -10,6 +10,7 @@ import CreateEquipos from "./src/screens/create/CreateEquipos"
 import CreateTorneos from "./src/screens/create/CreateTorneos"
 import UpdateJugador from "./src/screens/update/UpdateJugador"
 import UpdateEquipos from "./src/screens/update/UpdateEquipos"
+import UpdateTorneos from "./src/screens/update/UpdateTorneos"
 import Equipo from "./src/screens/equipos/Equipo"
 import Jugador from "./src/screens/participantes/Jugador"
 import Enfrentamientos from "./src/screens/matchup/Enfrentamientos"
@@ -59,6 +60,11 @@ export default function App() {
         <Stack.Screen
           name="UpdateEquipos"
           component={UpdateEquipos}
+          options={{ headerShown: false }}
+        />
+         <Stack.Screen
+          name="UpdateTorneos"
+          component={UpdateTorneos}
           options={{ headerShown: false }}
         />
         <Stack.Screen

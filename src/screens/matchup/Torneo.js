@@ -12,6 +12,7 @@ import {
   traerTipoTorneo,
   traerTablaPuntosTorneo,
   traerEnfrentamientosPorTorneo,
+  traerEquipoById,
 } from "../../api/torneos"
 import JWTManager from "../../api/JWTManager"
 import Ionicons from "react-native-vector-icons/Ionicons"
@@ -25,8 +26,13 @@ export default function Torneo(props) {
     navigation,
     route: { params },
   } = props
+  
   const [jwt, setJwt] = useState(null)
   const [torneo, setTorneo] = useState(null)
+  console.log('torneo: ', torneo);
+  const [idTeamWinner,setIdTeamWinner] = useState(null)
+  const [teamWinner, setTeamWinner] = useState(null)
+  const [estado, setEstado] = useState("")
   const [deportes, setDeportes] = useState(null)
   const [tipoTorneo, setTipoTorneo] = useState(null)
   const [tableData, setTableData] = useState(null)
@@ -73,6 +79,7 @@ export default function Torneo(props) {
           name: deporte.name,
         }))
         setTorneo(torneoResponse.data.Tournament)
+        setEstado(params.estado)
         setDeportes(deportesFiltrados)
         const tiposTorneoResponse = await traerTipoTorneo(
           jwt,
@@ -87,6 +94,15 @@ export default function Torneo(props) {
         )
 
         setTipoTorneo(tiposTorneoFiltrados)
+        if (torneoResponse.data.Tournament.fk_team_id_winner) {
+          const equipoGanadorResponse = await traerEquipoById(
+            jwt,
+            torneoResponse.data.Tournament.fk_team_id_winner
+          );
+          //console.log(equipoGanadorResponse.data.Teams);
+          setTeamWinner(equipoGanadorResponse.data.Teams); 
+         console.log(teamWinner);// Configura el equipo ganador en el estado
+        }
       } catch (error) {
         console.error(error)
         navigation.goBack()
@@ -98,7 +114,7 @@ export default function Torneo(props) {
     navigation.setOptions({
       headerRight: () => (
         <TouchableWithoutFeedback
-          onPress={() => navigation.navigate("UpdateTorneo", { id: params.id })}
+          onPress={() => navigation.navigate("UpdateTorneos", { id: params.id })}
         >
           <Ionicons
             name="ios-pencil-outline"
@@ -123,7 +139,7 @@ export default function Torneo(props) {
     (d) => d.id === torneo.fk_types_tournament_id
   )
   const handleMatchupPress = (matchup) => {
-    navigation.navigate("MatchupDetails", { jwt: jwt, matchup: matchup })
+    navigation.navigate("MatchupDetails", { jwt: jwt, matchup: matchup, tournament: params.id})
   }
   return (
     <>
@@ -132,11 +148,14 @@ export default function Torneo(props) {
         <View style={styles.header}>
           <Text style={styles.name}>{torneo.name}</Text>
           <Text style={styles.order}>Fecha de Inicio: {torneo.start_date}</Text>
-          <Text style={styles.order}>{torneo.sport_name}</Text>
+          <Text style={styles.name}>{estado}</Text>
         </View>
         {deporte && <Text style={styles.name}>Deporte: {deporte.name}</Text>}
         {tipoDeTorneo && (
           <Text style={styles.name}>Categoria: {tipoDeTorneo.name}</Text>
+        )}
+        {teamWinner!==null &&(
+          <Text style={styles.name}>Ganador: {teamWinner.name}</Text>
         )}
         <View style={styles.spacer}></View>
         {tipoDeTorneo.name === "CLASIFICATORIA" ? (
@@ -146,6 +165,7 @@ export default function Torneo(props) {
           data={enfrentamientos}
           onMatchupPress={handleMatchupPress}
         />
+
       </SafeAreaView>
     </>
   )

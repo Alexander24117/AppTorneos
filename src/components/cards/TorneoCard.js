@@ -4,9 +4,10 @@ import { useNavigation } from "@react-navigation/native"
 
 export default function TorneoCard(props) {
   const { torneo } = props
+  
   const navigation = useNavigation()
   const irTorneo = () => {
-    navigation.navigate("Torneo", { id: torneo.item.id })
+    navigation.navigate("Torneo", { id: torneo.item.id, estado: torneo.item.state_name })
   }
   return (
     <TouchableWithoutFeedback onPress={irTorneo}>

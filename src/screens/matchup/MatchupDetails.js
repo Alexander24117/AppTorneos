@@ -8,6 +8,7 @@ import {
   ScrollView,
   SafeAreaView,
   Image,
+  ToastAndroid
 } from "react-native"
 import DateTimePicker from "@react-native-community/datetimepicker"
 import {
@@ -16,17 +17,20 @@ import {
 } from "../../api/torneos"
 
 export default function MatchupDetails({ route, navigation }) {
-  const { jwt, matchup } = route.params
+  const { jwt, matchup, tournament } = route.params
+ 
   const [place, setPlace] = useState(matchup.place)
+  const [tournamentId, setTournament]= useState(tournament)
   const [date, setDate] = useState(new Date())
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [hour, setTime] = useState(new Date())
   const [showTimePicker, setShowTimePicker] = useState(false)
   const [points, setPoints] = useState(
     matchup.teams.map((team) => ({
+      team_id: team.team_id,
       id_matchups_tournaments_teams: team.matchups_tournaments_teams_id,
-      points: team.points || "",
-      penalties_points: team.penalties_points || "",
+      points: parseInt(team.points) || null,
+      penalties_points: parseInt(team.penalties_points) || null,
     }))
   )
 
@@ -35,23 +39,27 @@ export default function MatchupDetails({ route, navigation }) {
     const minutes = time.getMinutes().toString().padStart(2, "0")
     return `${hours}:${minutes}`
   }
-
+  const formatDateToYYYYMMDD = (date) => {
+    const formattedDate = new Date(date).toISOString().slice(0, 10);
+    return formattedDate;
+  };
   const updateMatchup = async () => {
     const updatedData = {
       matchups_id: matchup.matchups_id,
       place,
-      date,
-      hour,
+      date: formatDateToYYYYMMDD(date),
+      hour: formatTime(hour),
       teams: points.reduce((acc, team, index) => {
         acc[index] = team
         return acc
       }, {}),
     }
     // Llama a la función updateMatchup con los nuevos datos actualizados.
-
+    //console.log('data a enviar: ', updatedData);
     try {
       const response = await actualizarEnfrentamiento(jwt, updatedData)
       if (response.status === 200) {
+        ToastAndroid.show('Se Actualizó el enfrentamiento', ToastAndroid.SHORT);
         navigation.goBack()
       }
     } catch (error) {
@@ -59,8 +67,9 @@ export default function MatchupDetails({ route, navigation }) {
     }
   }
   const finalizarMatchup = async () => {
+    console.log('enfrenta ', matchup);
     const enfrentamiento = {
-      tournament_id: matchup.fk_tournaments_id, // Asegúrate de que este es el ID correcto del torneo
+      tournament_id: tournamentId, 
       matchups_id: matchup.matchups_id,
       teams: points.reduce((acc, team, index) => {
         acc[index] = team
@@ -68,14 +77,14 @@ export default function MatchupDetails({ route, navigation }) {
       }, {}),
     }
 
-    // Llama a la función finalizarEnfrentamientoAPI con los datos necesarios.
-    console.log(enfrentamiento)
+    //console.log('enfrentamiento: ',enfrentamiento)
 
     try {
-      // Asegúrate de llamar a la función que actualiza la API aquí.
-      // Por ejemplo: await finalizarEnfrentamientoAPI(jwt, enfrentamiento);
+      
       const response = await finalizarEnfrentamiento(jwt, enfrentamiento)
+      //console.log('respuesta: ', response);
       if (response.status === 200) {
+        ToastAndroid.show('Se Finalizó el enfrentamiento', ToastAndroid.SHORT);
         navigation.goBack()
       }
     } catch (error) {
@@ -153,8 +162,9 @@ export default function MatchupDetails({ route, navigation }) {
                 <Text style={styles.labelPoints}>Puntos:</Text>
                 <TextInput
                   style={styles.textInputPoints}
-                  value={points[index].points}
+                  value={points[index].points!==null?points[index].points.toString():"0"}
                   placeholder="0"
+                  keyboardType = "numeric"
                   onChangeText={(text) =>
                     setPoints((prevState) => {
                       const newPoints = [...prevState]
@@ -168,8 +178,9 @@ export default function MatchupDetails({ route, navigation }) {
                 <Text style={styles.labelPoints}>Puntos por penales:</Text>
                 <TextInput
                   style={styles.textInputPoints}
-                  value={points[index].penalties_points}
+                  value={points[index].penalties_points!== null ? points[index].penalties_points.toString(): '0'}
                   placeholder="0"
+                  keyboardType = "numeric"
                   onChangeText={(text) =>
                     setPoints((prevState) => {
                       const newPoints = [...prevState]
@@ -184,12 +195,12 @@ export default function MatchupDetails({ route, navigation }) {
               </Text>
             </View>
           ))}
-
-          <TouchableOpacity style={styles.button} onPress={updateMatchup}>
+          <TouchableOpacity disabled={matchup.status=='JUGADO'? true : false}  style={[styles.button,matchup.status=='JUGADO'?{backgroundColor:"#808080"}:{backgroundColor:"#0069D9"}]} onPress={updateMatchup}>
             <Text style={styles.buttonText}>Actualizar</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.button, { backgroundColor: "red", marginTop: 10 }]}
+            disabled={matchup.status=='JUGADO'? true : false}
+            style={[styles.button, matchup.status=='JUGADO'?{backgroundColor:"#808080"}:{ backgroundColor: "red", marginTop: 10 }]}
             onPress={finalizarMatchup}
           >
             <Text style={styles.buttonText}>Finalizar enfrentamiento</Text>

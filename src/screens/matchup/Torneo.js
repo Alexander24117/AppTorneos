@@ -110,21 +110,21 @@ export default function Torneo(props) {
     })()
   }, [params])
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableWithoutFeedback
-          onPress={() => navigation.navigate("UpdateTorneos", { id: params.id })}
-        >
-          <Ionicons
-            name="ios-pencil-outline"
-            size={38}
-            style={{ color: "#1d5bad", marginRight: 10 }}
-          />
-        </TouchableWithoutFeedback>
-      ),
-    })
-  }, [torneo])
+  // useEffect(() => {
+  //   navigation.setOptions({
+  //     headerRight: () => (
+  //       <TouchableWithoutFeedback
+  //         onPress={() => navigation.navigate("UpdateTorneos", { id: params.id })}
+  //       >
+  //         <Ionicons
+  //           name="ios-pencil-outline"
+  //           size={38}
+  //           style={{ color: "#1d5bad", marginRight: 10 }}
+  //         />
+  //       </TouchableWithoutFeedback>
+  //     ),
+  //   })
+  // }, [torneo])
 
   if (!torneo || !deportes || !tipoTorneo || !enfrentamientos) {
     //console.log(contador, "contador")

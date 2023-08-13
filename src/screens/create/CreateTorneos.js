@@ -87,7 +87,7 @@ export default function CreateTorneos(props) {
     //     },
     //   ]
     // })
-
+      
     setMatchups(response.data.data.matchups)
   }
   const eliminarImg64DeEquipos = (matchups) => {
@@ -403,14 +403,14 @@ export default function CreateTorneos(props) {
               />
             </>
           ) : null}
-          {etapaSeleccionada ? (
+          {(tipoTorneo == 1  || etapaSeleccionada) && (
             <TouchableOpacity
               style={styles.addButton}
               onPress={handleCrearTorneo}
             >
               <Text style={styles.addButtonText}>Crear Torneo</Text>
             </TouchableOpacity>
-          ) : null}
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>

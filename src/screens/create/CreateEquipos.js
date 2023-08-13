@@ -10,6 +10,7 @@ import {
   Pressable,
   Image,
   TouchableOpacity,
+  ToastAndroid
 } from "react-native"
 import React, { useState, useEffect } from "react"
 import * as SecureStore from "expo-secure-store"
@@ -97,6 +98,7 @@ export default function CreateEquipos(props) {
       console.log(values)
       const token = await SecureStore.getItemAsync("token")
       crearEquipo(token, values)
+      ToastAndroid.show('Se Creó el equipo', ToastAndroid.SHORT);
     },
   })
   values.fk_institutions_id = selectedInsti

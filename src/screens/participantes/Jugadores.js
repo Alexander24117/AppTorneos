@@ -10,11 +10,16 @@ export default function Jugadores({ navigation }) {
   const getJugadores = async () => {
     const jwt = await SecureStore.getItemAsync("token")
     const response = await traerJugadores(jwt)
+    const jugadoresActivos = response.Participants.filter(
+      (jugador) => jugador.state == 1
+    );
     if (response) {
-      setJugadores(response.Participants)
+      
+
+      setJugadores(jugadoresActivos)
     }
 
-    setJugadores(response.Participants)
+    setJugadores(jugadoresActivos)
   }
   useEffect(() => {
     getJugadores()

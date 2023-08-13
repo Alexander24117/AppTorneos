@@ -29,7 +29,7 @@ export default function Torneo(props) {
   
   const [jwt, setJwt] = useState(null)
   const [torneo, setTorneo] = useState(null)
-  console.log('torneo: ', torneo);
+  //console.log('torneo: ', torneo);
   const [idTeamWinner,setIdTeamWinner] = useState(null)
   const [teamWinner, setTeamWinner] = useState(null)
   const [estado, setEstado] = useState("")
@@ -101,7 +101,7 @@ export default function Torneo(props) {
           );
           //console.log(equipoGanadorResponse.data.Teams);
           setTeamWinner(equipoGanadorResponse.data.Teams); 
-         console.log(teamWinner);// Configura el equipo ganador en el estado
+         //console.log(teamWinner);// Configura el equipo ganador en el estado
         }
       } catch (error) {
         console.error(error)
@@ -127,7 +127,7 @@ export default function Torneo(props) {
   }, [torneo])
 
   if (!torneo || !deportes || !tipoTorneo || !enfrentamientos) {
-    console.log(contador, "contador")
+    //console.log(contador, "contador")
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#1d5bad" />

@@ -180,13 +180,21 @@ export default function CreateTorneos(props) {
 
   const agregarEquipo = () => {
     if (equipoSeleccionado) {
-      const equipo = equiposList.find((e) => e.key === equipoSeleccionado)
-      setEquiposAgregados([...equiposAgregados, equipo])
-      const equiposRestantes = equiposList.filter(
-        (e) => e.key !== equipoSeleccionado
-      )
-      setEquipos(equiposRestantes)
-      setEquipoSeleccionado(null)
+      // Verificar si el equipo ya existe en la lista
+      const existeEquipo = equiposAgregados.some((equipo) => equipo.key === equipoSeleccionado);
+  
+      if (!existeEquipo) {
+        const equipo = equiposList.find((e) => e.key === equipoSeleccionado);
+        setEquiposAgregados([...equiposAgregados, equipo]);
+        const equiposRestantes = equiposList.filter(
+          (e) => e.key !== equipoSeleccionado
+        );
+        setEquipos(equiposRestantes);
+        setEquipoSeleccionado(null);
+      } else {
+        // Mostrar una alerta o mensaje indicando que el equipo ya existe
+        alert('El equipo ya se encuentra en la lista.');
+      }
     }
   }
 
@@ -355,8 +363,10 @@ export default function CreateTorneos(props) {
               {equiposAgregados.length > 0 && (
                 <>
                   <Text style={styles.label}>Equipos agregados:</Text>
-                  <View style={{ width: "80%" }}>
-                    <ScrollView style={styles.equiposAgregados}>
+                  <View style={{ flex: 1 }}>
+                    <ScrollView 
+                      contentContainerStyle={{ paddingHorizontal: 40, marginTop: 10 }}
+                    >
                       {equiposAgregados.map((equipo) => (
                         <View style={styles.equipoItem} key={equipo.key}>
                           <Text style={styles.equipoNombre}>

@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Pressable,
   Image,
+  ToastAndroid,
 } from "react-native"
 import React, { useState, useEffect } from "react"
 import {
@@ -68,7 +69,7 @@ export default function UpdateEquipos(props) {
         matches_won: response.data.Teams.matches_won,
         matches_tied: response.data.Teams.matches_tied,
         matches_lost: response.data.Teams.matches_lost,
-        image_64: response.data.Teams.image_path,
+        image_64: '',
       })
     }
     traerEquipo()
@@ -120,6 +121,8 @@ export default function UpdateEquipos(props) {
     }
     console.log(equipo)
     const response = ActuEquipo(jwt, equipo)
+    ToastAndroid.show('Se Actualizó el equipo', ToastAndroid.SHORT);
+    navigation.navigate("Navigation")
     console.log(equipo)
   }
 

@@ -205,6 +205,7 @@ export default function UpdateJugador(props) {
       const response = ActuJugador(jwt, jugador)
       console.log(response)
      ToastAndroid.show('Se Actualizó el participante', ToastAndroid.SHORT);
+     navigation.navigate("Navigation")
 
  }
 
@@ -233,7 +234,7 @@ export default function UpdateJugador(props) {
     <TextInput
   style={styles.textInput}
   value={jugador.names}
-  onChangeText={(text) => onChangeField("names", text)}
+  onChangeText={(text) => onChangeField('names', text)}
   placeholder="Nombres"
 />
 <TextInput

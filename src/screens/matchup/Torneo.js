@@ -39,29 +39,32 @@ export default function Torneo(props) {
   const [enfrentamientos, setEnfrentamientos] = useState(null)
   const [selectedMatchup, setSelectedMatchup] = useState(null)
   const [contador, setContador] = useState(0)
-  useEffect(() => {
-    ;(async () => {
-      try {
-        const jwt = await jwtManager.getToken()
-        setJwt(jwt)
-        if (!jwt) {
-          return
-        }
 
-        const table = await traerTablaPuntosTorneo(jwt, params.id)
-        setTableData(table.data.table)
-        setContador(contador + 1)
-        const enfrentamientosResponse = await traerEnfrentamientosPorTorneo(
-          jwt,
-          params.id
-        )
-        setEnfrentamientos(enfrentamientosResponse.Enfrentamientos)
-      } catch (error) {
-        console.error(error)
+  const getTorneos = async () => {
+    try {
+      const jwt = await jwtManager.getToken();
+      setJwt(jwt);
+      if (!jwt) {
+        return;
       }
-    })()
-  }, [])
+
+      const [table, enfrentamientosResponse] = await Promise.all([
+        traerTablaPuntosTorneo(jwt, params.id),
+        traerEnfrentamientosPorTorneo(jwt, params.id),
+      ]);
+
+      setTableData(table.data.table);
+      setContador(contador + 1);
+      setEnfrentamientos(enfrentamientosResponse.Enfrentamientos);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
+    getTorneos();
+  }, []);
+  useEffect(() => {
+    getTorneos();
     ;(async () => {
       try {
         const jwt = await jwtManager.getToken()
@@ -99,9 +102,9 @@ export default function Torneo(props) {
             jwt,
             torneoResponse.data.Tournament.fk_team_id_winner
           );
-          //console.log(equipoGanadorResponse.data.Teams);
+         
           setTeamWinner(equipoGanadorResponse.data.Teams); 
-         //console.log(teamWinner);// Configura el equipo ganador en el estado
+         
         }
       } catch (error) {
         console.error(error)
@@ -125,6 +128,15 @@ export default function Torneo(props) {
   //     ),
   //   })
   // }, [torneo])
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      console.log("Pantalla Torneo enfocada");
+      getTorneos();
+    });
+
+    // Limpia la suscripción al desmontar el componente o cambiar de pantalla
+    return unsubscribe;
+  }, [navigation]);
 
   if (!torneo || !deportes || !tipoTorneo || !enfrentamientos) {
     //console.log(contador, "contador")

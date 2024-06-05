@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "AppTorneos",
-    "slug": "AppTorneos",
+    "name": "B-Sports Movil",
+    "slug": "b-sports-movil",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
@@ -9,10 +9,24 @@
     "splash": {
       "image": "./assets/unibaguelogo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#07162a"
+      "backgroundColor": "#07162a",
+      "plugins": [
+        [
+          "expo-build-properties",
+          {
+            "android": {
+              "compiledSdkVersion": 28,
+              "targetSdkVersion": 28,
+              "buildToolsVersion": "28.0.3",
+              "minSdkVersion": 28
+            }
+          }
+        ]
+      ]
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/befc9cbc-3724-4f4a-a798-64f071b6feee"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -21,6 +35,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.unibague.BMovil",
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#07162a"
@@ -28,6 +43,13 @@
     },
     "web": {
       "favicon": "./assets/logo.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "befc9cbc-3724-4f4a-a798-64f071b6feee"
+      }
+    },
+    "runtimeVersion": "exposdk:48.0.11",
+    "owner": "alexander24117"
   }
 }
